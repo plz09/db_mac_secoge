@@ -1,5 +1,5 @@
-from .database import write_df_to_sql
-from .excel_operations import remove_espacos_e_acentos
+from ..database.database import write_df_to_sql
+from ..utils.excel_operations import remove_espacos_e_acentos
 
 def process_spa_files(engine):
     path_matriz_GAH = 'data_bruto/SAP/MatrizGAH_GGAI_SECOGE.xlsx'

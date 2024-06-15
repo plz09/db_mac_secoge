@@ -1,44 +1,48 @@
 import sys
 import os
 
-# Adiciona o diretório raiz do projeto ao sys.path
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from src.database import create_engine_to_db, write_df_to_sql, connect_to_db, execute_query
-from src.data_processing import read_data_files
-from src.spa_processing import process_spa_files
-from src.unidades_mac import create_and_populate_unidades_mac
-from src.mae_coruja_processing import process_mae_coruja_files
+from src.database import create_engine_to_db, write_df_to_sql
+from src.data_processing import (
+    read_unidades_data,
+    read_producao_data,
+    read_ouvidoria_data,
+    read_horus_data,
+    read_mae_coruja_data,
+    process_mae_coruja_files,
+    read_atende_gestante_data,
+    read_atbasica_data
+)
 
 def main():
-    # Leitura dos arquivos e preparação dos dataframes
-    dataframes = read_data_files()
-
-    # Conexão com o banco de dados PostgreSQL
     db_name = 'db_mac_secoge'
     user = 'secoge'
     password = 'secoge5437'
     host = 'localhost'
-    port = 5432  # Porta mapeada do host
+    port = 5432
 
     engine = create_engine_to_db(db_name, user, password, host, port)
 
+    schemas = {
+        'unidades': read_unidades_data,
+        'producao': read_producao_data,
+        'ouvidoria': read_ouvidoria_data,
+        'horus': read_horus_data,
+        'mae_coruja': read_mae_coruja_data,
+        'atende_gestante': read_atende_gestante_data,
+        'atbasica': read_atbasica_data
+    }
+
     try:
-        # Iterar sobre os esquemas e tabelas e escrever cada DataFrame no banco de dados
-        for schema, tables in dataframes.items():
-            for table_name, df in tables.items():
+        for schema, read_data_func in schemas.items():
+            data = read_data_func()
+            for table_name, df in data.items():
                 print(f"Escrevendo a tabela {table_name} no esquema {schema}.")
                 write_df_to_sql(df, table_name, engine, schema)
-
-        # Cria e popula a tabela Unidades_mac
-        #create_and_populate_unidades_mac(engine)
-
-        # Processa os arquivos SPA
-        process_spa_files(engine)
-
-        # Processa os arquivos mae_coruja_espacos
+        
+        # Processa arquivos específicos do Mãe Coruja
         process_mae_coruja_files(engine)
-
     finally:
         engine.dispose()
 

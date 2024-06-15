@@ -1,6 +1,6 @@
--- codigo para criar e popular tabela unidades_tratado
-
-CREATE TABLE IF NOT EXISTS Unidades_tratado (
+-- codigo para criar e popular tabela unidades_mac
+-- Atualizar
+CREATE TABLE IF NOT EXISTS Unidades_mac (
         CNES_PADRAO INTEGER,
         CODIGO_UNIDADE INTEGER,
         DISTRITO INTEGER,
@@ -100,3 +100,25 @@ CREATE TABLE IF NOT EXISTS base_ouvidoria_mac (
     FROM 
         base_ouvidoria;
 
+
+
+-- Script para criar schemas
+CREATE SCHEMA IF NOT EXISTS unidades;
+CREATE SCHEMA IF NOT EXISTS spa;
+CREATE SCHEMA IF NOT EXISTS producao;
+CREATE SCHEMA IF NOT EXISTS ouvidoria;
+CREATE SCHEMA IF NOT EXISTS horus;
+CREATE SCHEMA IF NOT EXISTS mae_coruja;
+CREATE SCHEMA IF NOT EXISTS atende_gestante;
+CREATE SCHEMA IF NOT EXISTS atbasica;
+
+
+-- Script para criar deletar schemas
+DROP SCHEMA IF EXISTS unidades CASCADE;
+DROP SCHEMA IF EXISTS producao CASCADE;
+DROP SCHEMA IF EXISTS ouvidoria CASCADE;
+DROP SCHEMA IF EXISTS horus CASCADE;
+DROP SCHEMA IF EXISTS mae_coruja CASCADE;
+DROP SCHEMA IF EXISTS atende_gestante CASCADE;
+DROP SCHEMA IF EXISTS atbasica CASCADE;
+DROP SCHEMA IF EXISTS spa CASCADE;

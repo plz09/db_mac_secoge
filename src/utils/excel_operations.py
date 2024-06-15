@@ -23,11 +23,10 @@ def remove_espacos_e_acentos(arquivo, aba_selecionada=None, skip_rows=0, colunas
     
     if colunas is not None:
         if isinstance(colunas, list):
-            df.columns = [unidecode.unidecode(col).replace(' ', '_').replace('?', '').replace('-', '_').replace('.', '') for col in colunas]
+            df.columns = [unidecode.unidecode(col).strip().lower().replace(' ', '_').replace('?', '').replace('-', '_').replace('.', '') for col in colunas]
         else:
-            df.columns = unidecode.unidecode(colunas).replace(' ', '_').replace('?', '').replace('-', '_').replace('.', '')
+            df.columns = unidecode.unidecode(colunas).strip().lower().replace(' ', '_').replace('?', '').replace('-', '_').replace('.', '')
     else:
-        # Remove espaços e acentos dos nomes das colunas
-        df.columns = [unidecode.unidecode(col).replace(' ', '_').replace('?', '').replace('-', '_').replace('.', '') for col in df.columns]
+        df.columns = [unidecode.unidecode(col).strip().lower().replace(' ', '_').replace('?', '').replace('-', '_').replace('.', '') for col in df.columns]
 
     return df
