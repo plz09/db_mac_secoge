@@ -1,4 +1,4 @@
 # created by virtualenv automatically
-.venv
+.venv/
 data_bruto
 db_mac.sqlite
