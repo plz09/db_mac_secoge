@@ -1,8 +1,9 @@
 from .database import write_df_to_sql
 from .excel_operations import remove_espacos_e_acentos
 
-def process_mae_coruja_files(con):
+def process_mae_coruja_files(engine):
     path_mae_coruja_espacos = 'data_bruto/Mae_Coruja/Listagem_Espacos_PMCR_endereco_bairros_cobertos.xlsx'
+    schema = 'mae_coruja'
 
     abas_mae_coruja_espacos = [
         'ESPACOS',
@@ -29,5 +30,4 @@ def process_mae_coruja_files(con):
                 continue  # pula para a próxima iteração se ocorrer um erro
 
         table_name = aba.upper().replace(' ', '').replace('  ', '').replace('-', '').replace('Ç', 'C')
-        write_df_to_sql(df_mae_coruja_espacos, table_name, con)
-
+        write_df_to_sql(df_mae_coruja_espacos, table_name, engine, schema)

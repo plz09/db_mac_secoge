@@ -1,41 +1,42 @@
-import sqlite3
+from sqlalchemy import create_engine, text
 import pandas as pd
 
-def connect_to_db(db_name='db_mac.sqlite'):
+def create_engine_to_db(db_name, user, password, host='localhost', port=5432):
     """
-    Conecta ao banco de dados SQLite.
+    Cria um engine SQLAlchemy para o banco de dados PostgreSQL.
+    """
+    engine = create_engine(f'postgresql://{user}:{password}@{host}:{port}/{db_name}')
+    return engine
 
-    :param db_name: Nome do arquivo do banco de dados
-    :return: Objeto de conexão com o banco de dados SQLite
+def write_df_to_sql(df, table_name, engine, schema, if_exists='replace'):
     """
-    return sqlite3.connect(db_name)
-
-def write_df_to_sql(df, table_name, con, if_exists='replace', dtype=None):
-    """
-    Escreve um DataFrame no banco de dados SQLite.
+    Escreve um DataFrame no banco de dados PostgreSQL em um esquema específico.
 
     :param df: DataFrame a ser escrito no banco de dados
     :param table_name: Nome da tabela onde os dados serão inseridos
-    :param con: Objeto de conexão com o banco de dados SQLite
+    :param engine: Engine SQLAlchemy
+    :param schema: Nome do esquema onde a tabela será criada
     :param if_exists: Comportamento se a tabela já existir ('replace', 'append', 'fail')
-    :param dtype: Especificação dos tipos de dados das colunas (opcional)
     """
-    if isinstance(df, pd.DataFrame):
-        df.to_sql(table_name, con, if_exists='replace', index=False, dtype=dtype)
-    else:
-        raise ValueError(f"Esperado um DataFrame, mas recebeu {type(df)}")
+    try:
+        df.to_sql(table_name, engine, if_exists=if_exists, index=False, schema=schema)
+        print(f"Tabela {table_name} escrita no esquema {schema}.")
+    except Exception as e:
+        print(f"Erro ao escrever a tabela {table_name} no esquema {schema}: {e}")
+        raise
 
-def write_data_to_database(dataframes, con):
-    # Escrever os DataFrames no banco de dados SQLite
-    for df_name, df in dataframes.items():
-        write_df_to_sql(df, df_name, con)
+def connect_to_db(db_name, user, password, host='localhost', port=5432):
+    """
+    Conecta ao banco de dados PostgreSQL.
+    """
+    return create_engine(f'postgresql://{user}:{password}@{host}:{port}/{db_name}').connect()
 
 def execute_query(con, query):
     """
-    Executa uma query SQL no banco de dados SQLite.
+    Executa uma query SQL no banco de dados PostgreSQL.
 
-    :param con: Objeto de conexão com o banco de dados SQLite
+    :param con: Objeto de conexão com o banco de dados PostgreSQL
     :param query: Query SQL a ser executada
     """
-    con.execute(query)
-    con.commit()
+    with con.begin() as transaction:
+        transaction.execute(text(query))
