@@ -37,7 +37,7 @@ def process_mae_coruja_data(engine):
                                  'UNIDADES COBERTAS', 'DATA INAUGURAÇÃO ESPAÇO PMCR']
             try:
                 df_mae_coruja_espacos = remove_espacos_e_acentos(
-                    path_mae_coruja_espacos, aba_selecionada=aba, skip_rows=3, colunas=colunas_definidas)
+                    path_mae_coruja_espacos, aba_selecionada=aba, skip_rows=5, colunas=colunas_definidas)
             except Exception as e:
                 print(f"Erro ao processar a aba {aba}: {e}")
                 continue  # pula para a próxima iteração se ocorrer um erro
