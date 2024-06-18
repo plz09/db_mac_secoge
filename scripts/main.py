@@ -3,7 +3,7 @@ import os
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from src.database import create_engine_to_db, write_df_to_sql
+from src.database import create_engine_to_db, write_df_to_sql, create_schemas
 from src.data_processing import (
     read_unidades_data,
     read_producao_data,
@@ -21,6 +21,8 @@ def main():
     password = 'secoge5437'
     host = 'localhost'
     port = 5432
+
+    create_schemas(db_name, user, password, host, port)  # Chama a função para criar schemas
 
     engine = create_engine_to_db(db_name, user, password, host, port)
 

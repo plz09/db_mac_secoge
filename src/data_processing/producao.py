@@ -12,8 +12,8 @@ def read_producao_data():
     df_dPort157 = remove_espacos_e_acentos(path_dPort157)
 
     return {
-        'dFormaOrganiz': df_dFormaOrganiz,
-        'fProfissionais': df_fProfissionais,
-        'dCBO': df_dCBO,
-        'dPort157': df_dPort157,
+        'dformafrganiz': df_dFormaOrganiz,
+        'fprofissionais': df_fProfissionais,
+        'dcbo': df_dCBO,
+        'dport157': df_dPort157,
     }
