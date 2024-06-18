@@ -21,7 +21,8 @@ def main():
     password = 'secoge'
     host = 'localhost'
     port = 5432
-    create_schemas(db_name, user, password, host, port)  # Chama a função para criar schemas
+
+    create_schemas(db_name, user, password, host, port)  
 
     engine = create_engine_to_db(db_name, user, password, host, port)
 
