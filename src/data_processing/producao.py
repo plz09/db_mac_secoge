@@ -14,7 +14,7 @@ def read_producao_data():
     df_fproducao2024 = remove_espacos_e_acentos(path_fproducao2024)
 
     return {
-        'dformafrganiz': df_dFormaOrganiz,
+        'dformaorganiz': df_dFormaOrganiz,
         'fprofissionais': df_fProfissionais,
         'dcbo': df_dCBO,
         'dport157': df_dPort157,

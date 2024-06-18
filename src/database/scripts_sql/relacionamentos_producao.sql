@@ -88,3 +88,17 @@ where dcbo.cbo IS NULL
 ;
 
 select cbo from producao.dcbo where cbo LIKE '%322245%';
+
+
+-- Difinindo relacionamento de dformaorganiz com fproducao2024
+
+ALTER TABLE producao.fproducao2024
+ADD COLUMN fk_id_dformaorganiz INTEGER;
+
+UPDATE producao.fproducao2024 fprod 
+SET fk_id_dformaorganiz = dformaorganiz.id_dformaorganiz 
+FROM producao.dformaorganiz dforg 
+WHERE fprod.pa_proc_id = dforg.forma_org -- adicionar regre de negocio pra dispensar os 3 ultimos digitos de pa_proc_id
+
+ALTER TABLE producao.fproducao2024
+ADD CONSTRAINT fk_id_dformaorganiz FOREIGN KEY (fk_id_dformaorganiz) REFERENCES (id_dformaorganiz);
