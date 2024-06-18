@@ -1,4 +1,4 @@
-from sqlalchemy import create_engine, text
+from sqlalchemy import create_engine, Table, Column, Integer, BigInteger, Float, String, MetaData, text
 import pandas as pd
 import psycopg2
 
@@ -66,22 +66,42 @@ def write_df_to_sql(df, table_name, engine, schema, if_exists='replace'):
     """
     primary_key = f"id_{table_name}"
 
+    # Remover a coluna de chave primária se ela existir no DataFrame
+    if primary_key in df.columns:
+        df = df.drop(columns=[primary_key])
+
+    # Criar a tabela com SQLAlchemy
+    metadata = MetaData(schema=schema)
+    columns = [
+        Column(primary_key, Integer, primary_key=True, autoincrement=True)
+    ]
+    for col_name, col_type in zip(df.columns, df.dtypes):
+        if col_type == 'int64':
+            # Se os valores excedem o limite de Integer, use BigInteger
+            if df[col_name].max() > 2147483647 or df[col_name].min() < -2147483648:
+                columns.append(Column(col_name, BigInteger))
+            else:
+                columns.append(Column(col_name, Integer))
+        elif col_type == 'float64':
+            columns.append(Column(col_name, Float))
+        else:
+            columns.append(Column(col_name, String))
+
+    table = Table(table_name, metadata, *columns)
+
     try:
-        # Remover a coluna de chave primária se ela existir no DataFrame
-        if primary_key in df.columns:
-            df = df.drop(columns=[primary_key])
+        # Dropar a tabela se ela já existir
+        if if_exists == 'replace':
+            table.drop(engine, checkfirst=True)
 
-        # Criar a tabela no banco de dados
-        df.to_sql(table_name, engine, if_exists=if_exists, index=False, schema=schema)
-        print(f"Tabela {table_name} escrita no esquema {schema}.")
+        # Criar a tabela
+        metadata.create_all(engine)
 
-        # Adicionar a coluna SERIAL e definir como chave primária
-        with engine.connect() as con:
-            con.execute(text(f'ALTER TABLE {schema}.{table_name} ADD COLUMN {primary_key} SERIAL PRIMARY KEY;'))
-        
-        print(f"Tabela {table_name} no esquema {schema} atualizada com chave primária {primary_key}.")
+        # Inserir os dados no banco de dados
+        df.to_sql(table_name, engine, if_exists='append', index=False, schema=schema)
+        print(f"Tabela {table_name} no esquema {schema} criada e dados inseridos com sucesso.")
     except Exception as e:
-        print(f"Erro ao escrever a tabela {table_name} no esquema {schema}: {e}")
+        print(f"Erro ao criar a tabela {table_name} no esquema {schema} ou inserir os dados: {e}")
         raise
 
 def connect_to_db(db_name, user, password, host='localhost', port=5432):
