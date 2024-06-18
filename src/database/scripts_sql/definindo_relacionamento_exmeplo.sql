@@ -8,21 +8,21 @@ ALTER TABLE producao.dport157
 ALTER COLUMN cbo TYPE VARCHAR(255);
 
 ALTER TABLE producao.dport157 
-ADD COLUMN id_dcbo INTEGER;
+ADD COLUMN fk_id_dcbo INTEGER;
 
 
 UPDATE producao.dport157 d157
-SET id_dcbo = dcbo.id_dcbo
+SET fk_id_dcbo = dcbo.id_dcbo
 FROM producao.dcbo dcbo
 WHERE d157.cbo = dcbo.cbo;
 
-SELECT id_dport157, cbo, especialidade, procedimentos, id_dcbo 
+SELECT id_dport157, cbo, especialidade, procedimentos, fk_id_dcbo 
 FROM producao.dport157;
 
 -- Definir o que fazer os nulls (Existem em dport157 mas não existem em dcbo)
 
 ALTER TABLE producao.dport157
-ADD CONSTRAINT fk_dcbo FOREIGN KEY (id_dcbo) REFERENCES producao.dcbo (id_dcbo);
+ADD CONSTRAINT fk_dcbo FOREIGN KEY (fk_id_dcbo) REFERENCES producao.dcbo (id_dcbo);
 
 
 select 
@@ -37,4 +37,25 @@ on
 
 -- Definir relacionamento de dcbo com fproducao2024
 
-ALTER TABLE producao.d
+ALTER TABLE producao.fproducao2024;
+DROP COLUMN geometry;
+
+
+ALTER TABLE producao.fproducao2024
+ADD COLUMN fk_id_dcbo INTEGER;
+
+UPDATE producao.fproducao2024 fprod 
+SET fk_id_dcbo = dcbo.id_dcbo
+FROM producao.dcbo dcbo
+WHERE fprod.pa_cbocod = dcbo.cbo; 
+
+
+
+ALTER TABLE producao.fproducao2024
+ADD CONSTRAINT fk_cbo FOREIGN KEY (fk_id_dcbo) REFERENCES producao.dcbo (id_dcbo);
+
+
+-- o CBO abaixo não existe na tabela dcbo. Averiguar se há mais
+SELECT * FROM producao.dcbo WHERE cbo = '223415';
+
+
