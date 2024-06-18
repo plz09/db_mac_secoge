@@ -98,8 +98,8 @@ ADD COLUMN fk_id_dformaorganiz INTEGER;
 UPDATE producao.fproducao2024 fprod 
 SET fk_id_dformaorganiz = dforg.id_dformaorganiz 
 FROM producao.dformaorganiz dforg 
-WHERE LEFT(fprod.pa_proc_id, LENGTH(fprod.pa_proc_id) - 4) = dforg.forma_org;
-
+WHERE LEFT(CAST(fprod.pa_proc_id AS TEXT), LENGTH(CAST(fprod.pa_proc_id AS TEXT)) - 4)::INTEGER = dforg.forma_org;
 
 ALTER TABLE producao.fproducao2024
-ADD CONSTRAINT fk_id_dformaorganiz FOREIGN KEY (fk_id_dformaorganiz) REFERENCES (id_dformaorganiz);
+ADD CONSTRAINT fk_id_dformaorganiz FOREIGN KEY (fk_id_dformaorganiz) REFERENCES producao.dformaorganiz(id_dformaorganiz);
+
