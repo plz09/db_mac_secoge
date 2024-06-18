@@ -17,9 +17,9 @@ def create_schemas():
     try:
         # Conectar ao banco de dados PostgreSQL
         conn = psycopg2.connect(
-            dbname='db_mac_secoge',
+            dbname='postgres',
             user='secoge',
-            password='secoge5437',
+            password='secoge',
             host='localhost',
             port=5432
         )

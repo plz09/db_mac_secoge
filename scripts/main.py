@@ -16,9 +16,9 @@ from src.data_processing import (
 )
 
 def main():
-    db_name = 'db_mac_secoge'
+    db_name = 'postgres'
     user = 'secoge'
-    password = 'secoge5437'
+    password = 'secoge'
     host = 'localhost'
     port = 5432
 

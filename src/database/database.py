@@ -5,7 +5,7 @@ def create_engine_to_db(db_name, user, password, host='localhost', port=5432):
     """
     Cria um engine SQLAlchemy para o banco de dados PostgreSQL.
     """
-    engine = create_engine(f'postgresql://{user}:{password}@{host}:{port}/{db_name}')
+    engine = create_engine(f'postgresql://{user}:{password}@{host}:{port}/{db_name}client_encoding=utf8')
     return engine
 
 def write_df_to_sql(df, table_name, engine, schema, if_exists='replace'):
