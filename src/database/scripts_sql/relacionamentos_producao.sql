@@ -59,3 +59,32 @@ ADD CONSTRAINT fk_cbo FOREIGN KEY (fk_id_dcbo) REFERENCES producao.dcbo (id_dcbo
 SELECT * FROM producao.dcbo WHERE cbo = '223415';
 
 
+
+-- Definindo relacionamentos de dcbo com fprofissionais
+
+ALTER TABLE producao.fprofissionais
+ADD COLUMN fk_id_dcbo INTEGER;
+
+UPDATE producao.fprofissionais fprof 
+SET fk_id_dcbo = dcbo.id_dcbo
+FROM producao.dcbo dcbo
+WHERE fprof.cbo = dcbo.cbo;
+
+ALTER TABLE producao.fprofissionais
+ADD CONSTRAINT fk_id_dcbo FOREIGN KEY (fk_id_dcbo) REFERENCES producao.dcbo (id_dcbo);
+
+-- aparentemente muitos CBOs que existem em fprofissionais não existem em dcbo
+
+-- COUNT DISTINCT de cbo de fprofissionais é 181. O count distinct de cbo de dcbo é 96
+
+select 
+	*
+from 
+	producao.dcbo as dcbo
+right join 
+	producao.fprofissionais as fprof
+on dcbo.id_dcbo = fprof.fk_id_dcbo
+where dcbo.cbo IS NULL
+;
+
+select cbo from producao.dcbo where cbo LIKE '%322245%';
