@@ -37,7 +37,7 @@ on
 
 -- Definir relacionamento de dcbo com fproducao2024
 
-ALTER TABLE producao.fproducao2024;
+ALTER TABLE producao.fproducao2024
 DROP COLUMN geometry;
 
 
@@ -87,7 +87,7 @@ on dcbo.id_dcbo = fprof.fk_id_dcbo
 where dcbo.cbo IS NULL
 ;
 
-select cbo from producao.dcbo where cbo LIKE '%322245%';
+--select cbo from producao.dcbo where cbo LIKE '%322245%';
 
 
 -- Difinindo relacionamento de dformaorganiz com fproducao2024
@@ -103,3 +103,24 @@ WHERE LEFT(CAST(fprod.pa_proc_id AS TEXT), LENGTH(CAST(fprod.pa_proc_id AS TEXT)
 ALTER TABLE producao.fproducao2024
 ADD CONSTRAINT fk_id_dformaorganiz FOREIGN KEY (fk_id_dformaorganiz) REFERENCES producao.dformaorganiz(id_dformaorganiz);
 
+
+
+-- possível solução para atualizar a coluna fk_id_dcbo
+
+CREATE OR REPLACE FUNCTION update_fk_id_dcbo()
+RETURNS TRIGGER AS $$
+BEGIN
+    UPDATE producao.dport157
+    SET fk_id_dcbo = NEW.id_dcbo
+    WHERE cbo = NEW.cbo;
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER trg_update_fk_id_dcbo
+AFTER INSERT ON producao.dcbo
+FOR EACH ROW
+EXECUTE FUNCTION update_fk_id_dcbo();
+
+
+-- solução mais automatizada para atualizar a coluna fk_id_dcbo em todas as tabelas em que essa coluna estiver.
