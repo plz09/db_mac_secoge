@@ -75,7 +75,7 @@ def write_df_to_sql(df, table_name, engine, schema, if_exists='replace'):
     # Criar a tabela com SQLAlchemy
     metadata = MetaData(schema=schema)
     columns = [
-        Column(primary_key, Integer, primary_key=True, autoincrement=True)
+        Column(primary_key, Integer, primary_key=True, autoincrement=True, nullable=False, unique=True)
     ]
     for col_name, col_type in zip(df.columns, df.dtypes):
         if col_type == 'int64':
