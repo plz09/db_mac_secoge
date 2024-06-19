@@ -178,3 +178,11 @@ CREATE TRIGGER trg_update_fk_id_dcbo_all_schemas
 AFTER INSERT ON producao.dcbo
 FOR EACH ROW
 EXECUTE FUNCTION update_fk_id_dcbo_all_schemas();
+
+
+/*
+INSERT INTO producao.dcbo (cbo, ds_cbo)
+VALUES 
+('223117', 'MEDICO DERMATOLOGISTA HANSENOLOGO'),
+('223142', 'MEDICO NEUROPEDIATRA');
+*/
