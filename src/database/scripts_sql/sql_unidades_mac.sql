@@ -1,104 +1,31 @@
 -- codigo para criar e popular tabela unidades_mac
--- Atualizar
-CREATE TABLE IF NOT EXISTS Unidades_mac (
-        CNES_PADRAO INTEGER,
-        CODIGO_UNIDADE INTEGER,
-        DISTRITO INTEGER,
-        NOME TEXT,
-        TIPO_SERVI TEXT
+
+CREATE TABLE IF NOT EXISTS unidades.unidades_mac (
+		id_unidades_mac Integer,
+        cnes_padrao INTEGER,
+        codigo_unidade INTEGER,
+        distrito INTEGER,
+        nome CHARACTER VARYING,
+        tipo_servi CHARACTER VARYING
     );
-    
-  INSERT INTO Unidades_tratado (CNES_PADRAO, CODIGO_UNIDADE, DISTRITO, NOME, TIPO_SERVI)
-  SELECT CNES_PADRAO, CODIGO_UNIDADE, DISTRITO, NOME, TIPO_SERVI
-  FROM Unidades;
+
+INSERT INTO unidades.unidades_mac (id_unidades_mac, cnes_padrao, codigo_unidade, distrito, nome, tipo_servi)
+SELECT id_unidades, cnes_padrao, no_da_us, ds, nome_fantasia, tipo_servi
+FROM unidades.unidades;
+
+
+select * from unidades.unidades_mac;
+
   
- SELECT * 
- FROM Unidades_tratado
- WHERE CODIGO_UNIDADE = 0
- ;
 
-
- SELECT 
-    fp.PA_PROC_ID,
-    ut.TIPO_SERVI,
-    SUM(fp.PA_QTDAPR)
-FROM 
-    fProducao2024 fp
-JOIN 
-    Unidades_tratado ut ON fp.PA_CODUNI = ut.CODIGO_UNIDADE
-GROUP BY 
-    fp.PA_PROC_ID, ut.TIPO_SERVI;
+ 
 
 
 
--- codigo para criar e popular tabela base_ouvidoria_mac
-
-CREATE TABLE IF NOT EXISTS base_ouvidoria_mac (
-        PROTOCOLO INTEGER,
-        DATA_DA_DEMANDA DATE,
-        DEMANDA_ATIVA TEXT,
-        STATUS TEXT,
-        DATA_DE_FECHAMENTO_DEMANDA DATE,
-        DIAS_DE_TRAMITACAO INTEGER,
-        PRAZO_VENCIDO TEXT,
-        CLASSIFICACAO TEXT,
-        ASSUNTO TEXT,
-        SUBASSUNTO_01 TEXT,
-        SUBASSUNTO_02 TEXT,
-        SUBASSUNTO_03 TEXT,
-        ESTAB_COMERCIAL TEXT,
-        PRIMEIRO_DESTINO TEXT,
-        DATA_PRIMEIRO_DESTINO_ENCAMINHAMENTO DATE,
-        OUVIDORIA_SEGUNDO_ENCAMINHAMENTO TEXT,
-        OUVIDORIA_TERCEIRO_ENCAMINHAMENTO TEXT,
-        DESTINO_ATUAL TEXT,
-        INDICADOR_RMAC TEXT    
-    );
 
 
 
-    INSERT INTO base_ouvidoria_mac (
-        PROTOCOLO,
-        DATA_DA_DEMANDA,
-        DEMANDA_ATIVA,
-        STATUS,
-        DATA_DE_FECHAMENTO_DEMANDA,
-        DIAS_DE_TRAMITACAO,
-        PRAZO_VENCIDO,
-        CLASSIFICACAO,
-        ASSUNTO,
-        SUBASSUNTO_01,
-        SUBASSUNTO_02,
-        SUBASSUNTO_03,
-        ESTAB_COMERCIAL,
-        PRIMEIRO_DESTINO,
-        DATA_PRIMEIRO_DESTINO_ENCAMINHAMENTO,
-        OUVIDORIA_SEGUNDO_ENCAMINHAMENTO,
-        OUVIDORIA_TERCEIRO_ENCAMINHAMENTO,
-        DESTINO_ATUAL,
-        INDICADOR_RMAC)
-    SELECT 
-        PROTOCOLO,
-        DATA_DA_DEMANDA,
-        DEMANDA_ATIVA,
-        STATUS,
-        DATA_DE_FECHAMENTO_DA_DEMANDA,
-        DIAS_DE_TRAMITACAO,
-        PRAZO_VENCIDO,
-        CLASSIFICACAO,
-        ASSUNTO,
-        SUBASSUNTO_1,
-        SUBASSUNTO_2,
-        SUBASSUNTO_3,
-        ESTAB_COMERCIAL,
-        MUN_PRIMEIRO_DESTINO,
-        DATA_PRIMEIRO_DESTINO_ENCAMINHAMENTO,
-        OUVIDORIA_SEGUNDO_ENCAMINHAMENTO,
-        OUVIDORIA_TERCEIRO_ENCAMINHAMENTO,
-        DESTINO_ATUAL,
-        Indicador_RMAC
-    FROM 
-        base_ouvidoria;
+
 
 
 
