@@ -123,7 +123,7 @@ FOR EACH ROW
 EXECUTE FUNCTION update_fk_id_dcbo();
 
 
--- solução mais automatizada para atualizar a coluna fk_id_dcbo em todas as tabelas em que essa coluna estiver.
+-- solução mais automatizada para atualizar a coluna fk_id_dcbo em todas as tabelas do schema producao em que essa coluna estiver.
 
 CREATE OR REPLACE FUNCTION update_fk_id_dcbo_all_tables()
 RETURNS TRIGGER AS $$
@@ -150,3 +150,31 @@ CREATE TRIGGER trg_update_fk_id_dcbo_all_tables
 AFTER INSERT ON producao.dcbo
 FOR EACH ROW
 EXECUTE FUNCTION update_fk_id_dcbo_all_tables();
+
+
+-- -- solução mais automatizada para atualizar a coluna fk_id_dcbo em todas as tabelas em que essa coluna estiver independemente do schema.
+
+CREATE OR REPLACE FUNCTION update_fk_id_dcbo_all_schemas()
+RETURNS TRIGGER AS $$
+DECLARE
+    rec RECORD;
+    sql TEXT;
+BEGIN
+    -- Loop through each table in all schemas that contains fk_id_dcbo
+    FOR rec IN 
+        SELECT table_schema, table_name 
+        FROM information_schema.columns 
+        WHERE column_name = 'fk_id_dcbo'
+    LOOP
+        -- Build the dynamic SQL to update the table
+        sql := 'UPDATE ' || rec.table_schema || '.' || rec.table_name || ' SET fk_id_dcbo = $1 WHERE cbo = $2';
+        EXECUTE sql USING NEW.id_dcbo, NEW.cbo;
+    END LOOP;
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER trg_update_fk_id_dcbo_all_schemas
+AFTER INSERT ON producao.dcbo
+FOR EACH ROW
+EXECUTE FUNCTION update_fk_id_dcbo_all_schemas();
