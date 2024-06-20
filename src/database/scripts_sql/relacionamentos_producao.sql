@@ -25,21 +25,11 @@ ALTER TABLE producao.dport157
 ADD CONSTRAINT fk_dcbo FOREIGN KEY (fk_id_dcbo) REFERENCES producao.dcbo (id_dcbo);
 
 
-select 
-	*
-from
-	producao.dcbo cbo
-join 
-	producao.dport157 d157
-on 
-	cbo.id_dcbo = d157.id_dcbo;
-
 
 -- Definir relacionamento de dcbo com fproducao2024
 
 ALTER TABLE producao.fproducao2024
 DROP COLUMN geometry;
-
 
 ALTER TABLE producao.fproducao2024
 ADD COLUMN fk_id_dcbo INTEGER;
@@ -48,8 +38,6 @@ UPDATE producao.fproducao2024 fprod
 SET fk_id_dcbo = dcbo.id_dcbo
 FROM producao.dcbo dcbo
 WHERE fprod.pa_cbocod = dcbo.cbo; 
-
-
 
 ALTER TABLE producao.fproducao2024
 ADD CONSTRAINT fk_cbo FOREIGN KEY (fk_id_dcbo) REFERENCES producao.dcbo (id_dcbo);
@@ -169,6 +157,60 @@ BEGIN
         -- Build the dynamic SQL to update the table
         sql := 'UPDATE ' || rec.table_schema || '.' || rec.table_name || ' SET fk_id_dcbo = $1 WHERE cbo = $2';
         EXECUTE sql USING NEW.id_dcbo, NEW.cbo;
+    END LOOP;
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER trg_update_fk_id_dcbo_all_schemas
+AFTER INSERT ON producao.dcbo
+FOR EACH ROW
+EXECUTE FUNCTION update_fk_id_dcbo_all_schemas();
+
+
+-- Solução para atualizar coluna cbo em tabelas com a coluna com nome cbo e na tabela fproducao2024 que o nome da coluna pa_cbocod
+
+CREATE OR REPLACE FUNCTION update_fk_id_dcbo_all_schemas()
+RETURNS TRIGGER AS $$
+DECLARE
+    rec RECORD;
+    sql TEXT;
+    has_cbo_column BOOLEAN;
+BEGIN
+    -- Loop through each table in all schemas that contains fk_id_dcbo
+    FOR rec IN 
+        SELECT table_schema, table_name 
+        FROM information_schema.columns 
+        WHERE column_name = 'fk_id_dcbo'
+    LOOP
+        -- Check if the table has the 'cbo' column
+        SELECT EXISTS (
+            SELECT 1 
+            FROM information_schema.columns 
+            WHERE table_schema = rec.table_schema 
+              AND table_name = rec.table_name 
+              AND column_name = 'cbo'
+        ) INTO has_cbo_column;
+        
+        IF has_cbo_column THEN
+            -- Build the dynamic SQL to update the table
+            sql := 'UPDATE ' || rec.table_schema || '.' || rec.table_name || ' SET fk_id_dcbo = $1 WHERE cbo = $2';
+            EXECUTE sql USING NEW.id_dcbo, NEW.cbo;
+        ELSE
+            -- Handle the table with 'pa_cbocod' column
+            SELECT EXISTS (
+                SELECT 1 
+                FROM information_schema.columns 
+                WHERE table_schema = rec.table_schema 
+                  AND table_name = rec.table_name 
+                  AND column_name = 'pa_cbocod'
+            ) INTO has_cbo_column;
+            
+            IF has_cbo_column THEN
+                sql := 'UPDATE ' || rec.table_schema || '.' || rec.table_name || ' SET fk_id_dcbo = $1 WHERE pa_cbocod = $2';
+                EXECUTE sql USING NEW.id_dcbo, NEW.cbo;
+            END IF;
+        END IF;
     END LOOP;
     RETURN NEW;
 END;
