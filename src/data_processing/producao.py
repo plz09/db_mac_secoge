@@ -11,7 +11,7 @@ def read_producao_data():
     df_fProfissionais = remove_espacos_e_acentos(path_fProfissionais)
     df_dCBO = remove_espacos_e_acentos(path_dCBO)
     df_dPort157 = remove_espacos_e_acentos(path_dPort157)
-    df_fproducao2024 = remove_espacos_e_acentos(path_fproducao2024)
+    df_fproducao2024 = remove_espacos_e_acentos(path_fproducao2024, dtype={3: str})
 
     return {
         'dformaorganiz': df_dFormaOrganiz,
