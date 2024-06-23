@@ -6,6 +6,7 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from src.database import create_engine_to_db, write_df_to_sql, create_schemas
 from src.data_processing import (
     read_ds_unidades_data,
+    create_unidades_mac,
     read_producao_data,
     read_ouvidoria_data,
     read_horus_data,
@@ -23,6 +24,8 @@ def main():
     port = 5432
 
     create_schemas(db_name, user, password, host, port)  
+    
+
 
     engine = create_engine_to_db(db_name, user, password, host, port)
 
@@ -46,6 +49,10 @@ def main():
                 for table_name, df in data.items():
                     print(f"Escrevendo a tabela {table_name} no esquema {schema}.")
                     write_df_to_sql(df, table_name, engine, schema)
+    except Exception as error:
+        print(f"Erro ao processar função data_data_func: {error}") 
+    else:
+        create_unidades_mac(db_name, user, password, host, port)               
     finally:
         engine.dispose()
 
