@@ -13,7 +13,7 @@ def remove_espacos_e_acentos(arquivo, aba_selecionada=None, skip_rows=0, colunas
     :return: DataFrame com os espaços, acentos e caracteres específicos removidos das colunas
     """
 
-    if arquivo.endswith('.xlsx'):
+    if arquivo.endswith('.xlsx'):      
         if aba_selecionada is None:
             df = pd.read_excel(arquivo, skiprows=skip_rows, dtype=dtype)
         else:
