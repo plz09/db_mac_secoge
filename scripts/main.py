@@ -5,7 +5,7 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from src.database import create_engine_to_db, write_df_to_sql, create_schemas
 from src.data_processing import (
-    read_unidades_data,
+    read_ds_unidades_data,
     read_producao_data,
     read_ouvidoria_data,
     read_horus_data,
@@ -27,7 +27,7 @@ def main():
     engine = create_engine_to_db(db_name, user, password, host, port)
 
     schemas = {
-        'unidades': read_unidades_data,
+        'ds_unidades': read_ds_unidades_data,
         'producao': read_producao_data,
         'ouvidoria': read_ouvidoria_data,
         'horus': read_horus_data,

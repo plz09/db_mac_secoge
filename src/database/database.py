@@ -26,7 +26,7 @@ def create_schemas(db_name, user, password, host='localhost', port=5432):
         "CREATE SCHEMA IF NOT EXISTS mae_coruja",
         "CREATE SCHEMA IF NOT EXISTS atende_gestante",
         "CREATE SCHEMA IF NOT EXISTS atbasica",
-        "CREATE SCHEMA IF NOT EXISTS unidades",
+        "CREATE SCHEMA IF NOT EXISTS ds_unidades",
         "CREATE SCHEMA IF NOT EXISTS spa"
     ]
 
