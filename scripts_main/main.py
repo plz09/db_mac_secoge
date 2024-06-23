@@ -15,7 +15,8 @@ from src.data_processing import (
     read_atbasica_data,
     process_spa_files
 )
-
+from src.sql_operations.sql_operations import execute_sql_script, get_script_path
+    
 def main():
     db_name = 'db_mac_secoge'
     user = 'postgres'
@@ -24,20 +25,17 @@ def main():
     port = 5432
 
     create_schemas(db_name, user, password, host, port)  
-    
-
-
     engine = create_engine_to_db(db_name, user, password, host, port)
 
     schemas = {
         'ds_unidades': read_ds_unidades_data,
-        'producao': read_producao_data,
-        'ouvidoria': read_ouvidoria_data,
-        'horus': read_horus_data,
-        'mae_coruja': process_mae_coruja_data,
-        'atende_gestante': read_atende_gestante_data,
-        'atbasica': read_atbasica_data,
-        'spa': process_spa_files
+        #'producao': read_producao_data,
+        #'ouvidoria': read_ouvidoria_data,
+        #'horus': read_horus_data,
+        #'mae_coruja': process_mae_coruja_data,
+        #'atende_gestante': read_atende_gestante_data,
+        #'atbasica': read_atbasica_data,
+        #'spa': process_spa_files
     }
 
     try:
@@ -52,7 +50,10 @@ def main():
     except Exception as error:
         print(f"Erro ao processar função data_data_func: {error}") 
     else:
-        create_unidades_mac(db_name, user, password, host, port)               
+        create_unidades_mac(db_name, user, password, host, port)   
+
+        script_path = get_script_path('rel_unidades_mac_distritos.sql')
+        execute_sql_script(db_name, user, password, host, port, script_path)       
     finally:
         engine.dispose()
 
