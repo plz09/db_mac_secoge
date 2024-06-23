@@ -14,7 +14,7 @@ def db_connection(db_name, user, password, host, port):
     try:
         yield engine
     finally:
-        engine.dispose()
+        engine.dispose()    
 
 def process_data(schemas, engine):
     for schema, read_data_func in schemas.items():

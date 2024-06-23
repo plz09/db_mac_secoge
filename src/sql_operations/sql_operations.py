@@ -50,5 +50,5 @@ def get_script_path(script_name):
     :param script_name: Nome do arquivo de script SQL
     :return: Caminho absoluto para o arquivo de script SQL
     """
-    # Sobe dois níveis: do __file__ para src e depois para o diretório principal
+    # Caminho absoluto para o arquivo de script SQL.
     return os.path.join('scripts_sql', script_name)
