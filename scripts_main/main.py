@@ -1,61 +1,54 @@
 import sys
 import os
+from contextlib import contextmanager
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from src.database import create_engine_to_db, write_df_to_sql, create_schemas
-from src.data_processing import (
-    read_ds_unidades_data,
-    create_unidades_mac,
-    read_producao_data,
-    read_ouvidoria_data,
-    read_horus_data,
-    process_mae_coruja_data,
-    read_atende_gestante_data,
-    read_atbasica_data,
-    process_spa_files
-)
+from src.data_processing import get_data_processing_functions
 from src.sql_operations.sql_operations import execute_sql_script, get_script_path
-    
-def main():
-    db_name = 'db_mac_secoge'
-    user = 'postgres'
-    password = 'secoge'
-    host = 'localhost'
-    port = 5432
 
-    create_schemas(db_name, user, password, host, port)  
+@contextmanager
+def db_connection(db_name, user, password, host, port):
     engine = create_engine_to_db(db_name, user, password, host, port)
-
-    schemas = {
-        'ds_unidades': read_ds_unidades_data,
-        #'producao': read_producao_data,
-        #'ouvidoria': read_ouvidoria_data,
-        #'horus': read_horus_data,
-        #'mae_coruja': process_mae_coruja_data,
-        #'atende_gestante': read_atende_gestante_data,
-        #'atbasica': read_atbasica_data,
-        #'spa': process_spa_files
-    }
-
     try:
-        for schema, read_data_func in schemas.items():
-            if schema == 'mae_coruja' or schema == 'spa':
-                read_data_func(engine)  # processa e escreve diretamente no banco de dados
-            else:
-                data = read_data_func()
-                for table_name, df in data.items():
-                    print(f"Escrevendo a tabela {table_name} no esquema {schema}.")
-                    write_df_to_sql(df, table_name, engine, schema)
-    except Exception as error:
-        print(f"Erro ao processar função data_data_func: {error}") 
-    else:
-        create_unidades_mac(db_name, user, password, host, port)   
-
-        script_path = get_script_path('rel_unidades_mac_distritos.sql')
-        execute_sql_script(db_name, user, password, host, port, script_path)       
+        yield engine
     finally:
         engine.dispose()
+
+def process_data(schemas, engine):
+    for schema, read_data_func in schemas.items():
+        if schema in ['mae_coruja', 'spa']:
+            read_data_func(engine)
+        else:
+            data = read_data_func()
+            for table_name, df in data.items():
+                print(f"Escrevendo a tabela {table_name} no esquema {schema}.")
+                write_df_to_sql(df, table_name, engine, schema)
+
+def run_scripts(db_name, user, password, host, port):
+    script_path = get_script_path('create_unidades_mac.sql')
+    execute_sql_script(db_name, user, password, host, port, script_path)
+
+def main():
+    config = {
+        'db_name': 'db_mac_secoge',
+        'user': 'postgres',
+        'password': 'secoge',
+        'host': 'localhost',
+        'port': 5432
+    }
+
+    schemas = get_data_processing_functions()
+
+    create_schemas(**config)
+
+    try:
+        with db_connection(**config) as engine:
+            process_data(schemas, engine)
+            run_scripts(**config)
+    except Exception as error:
+        print(f"Erro ao processar função data_data_func: {error}")
 
 if __name__ == '__main__':
     main()

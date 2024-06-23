@@ -1,5 +1,6 @@
--- codigo para criar e popular tabela unidades_mac
-/*
+
+-- Cria e popula tabela unidades_mac
+
 CREATE TABLE IF NOT EXISTS ds_unidades.unidades_mac (
 		id_unidades_mac SERIAL PRIMARY KEY,
         cnes_padrao INTEGER,
@@ -9,12 +10,16 @@ CREATE TABLE IF NOT EXISTS ds_unidades.unidades_mac (
         tipo_servi CHARACTER VARYING
     );
 
-INSERT INTO ds_unidades.unidades_mac (id_unidades_mac, cnes_padrao, codigo_unidade, distrito, nome, tipo_servi)
-SELECT id_unidades, cnes_padrao, no_da_us, ds, nome_fantasia, tipo_servi
-FROM ds_unidades.unidades;
-*/
+INSERT INTO 
+    ds_unidades.unidades_mac (cnes_padrao, codigo_unidade, distrito, nome, tipo_servi)
+SELECT 
+    cnes_padrao, no_da_us, ds, nome_fantasia, tipo_servi
+FROM 
+    ds_unidades.unidades
+;
 
--- Difinindo FK de Distritos
+
+-- Define relacionamento entre unidades_mac e ditritos inserindo FK em unidades_mac
 
 ALTER TABLE ds_unidades.unidades_mac
 ADD COLUMN fk_distritos INTEGER
@@ -30,4 +35,3 @@ ALTER TABLE ds_unidades.unidades_mac
 ADD CONSTRAINT fk_distritos FOREIGN KEY (fk_distritos) REFERENCES ds_unidades.distritos(id_distritos)
 ;
   
-
