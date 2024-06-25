@@ -23,5 +23,5 @@ def process_spa_files(engine):
             print(f"Erro ao processar a aba {aba}: {e}")
             continue  # pula para a próxima iteração se ocorrer um erro
 
-        table_name = aba.lower().replace(' ', '').replace('  ', '').replace('-', '').replace('ç', 'c')
+        table_name = aba.lower().replace(' ', '').replace('  ', '').replace('-', '').replace('ç', 'c').replace('ã', 'a').replace('í', 'i').replace('spa', 'spa_')
         write_df_to_sql(df_spa_tratado, table_name, engine, schema)
