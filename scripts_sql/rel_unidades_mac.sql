@@ -40,3 +40,30 @@ WHERE EXISTS (
 )
 ;
 
+-- SPA Classificação Pediatria
+
+ALTER TABLE spa.spa_classificacaopediatria
+ADD COLUMN fk_id_unidades_mac INTEGER
+;
+
+UPDATE spa.spa_classificacaopediatria
+SET unidade = 'US 164 CENTRO DE REIDRATACAO E URG PED M CRAVO GAMA'
+WHERE unidade = 'Cravo Gama'
+;
+
+UPDATE spa.spa_classificacaopediatria spaclassped
+SET fk_id_unidades_mac = (
+    SELECT tab_mac.id_unidades_mac
+    FROM ds_unidades.unidades_mac tab_mac
+    WHERE tab_mac.nome LIKE CONCAT('%', spaclassped.unidade, '%')
+)
+WHERE EXISTS (
+    SELECT 1
+    FROM ds_unidades.unidades_mac tab_mac
+    WHERE tab_mac.nome LIKE CONCAT('%', spaclassped.unidade, '%')
+)
+;
+
+
+-- SPA Clínico
+
