@@ -25,6 +25,7 @@ ADD COLUMN fk_id_unidades_mac INTEGER
 UPDATE spa.spa_classificacao  
 SET unidade = 'Us 159 Policlinica Agamenon Magalhaes'
 WHERE unidade = 'PAM'
+;
 
 UPDATE spa.spa_classificacao spaclass
 SET fk_id_unidades_mac = (
@@ -36,5 +37,6 @@ WHERE EXISTS (
     SELECT 1
     FROM ds_unidades.unidades_mac tab_mac 
     WHERE tab_mac.nome LIKE CONCAT('%', spaclass.unidade, '%')
-);
+)
+;
 

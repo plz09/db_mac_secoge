@@ -27,8 +27,9 @@ def process_data(schemas, engine):
                 write_df_to_sql(df, table_name, engine, schema)
 
 def run_scripts(db_name, user, password, host, port):
-    script_path = get_script_path('create_unidades_mac.sql')
-    execute_sql_script(db_name, user, password, host, port, script_path)
+    script_paths = get_script_path(['create_unidades_mac.sql', 'rel_unidades_mac.sql'])
+    for script_path in script_paths:
+        execute_sql_script(db_name, user, password, host, port, script_path)
 
 def main():
     config = {
@@ -48,7 +49,7 @@ def main():
             process_data(schemas, engine)
             run_scripts(**config)
     except Exception as error:
-        print(f"Erro ao processar função data_data_func: {error}")
+        print(f"Erro ao processar função: {error}")
 
 if __name__ == '__main__':
     main()

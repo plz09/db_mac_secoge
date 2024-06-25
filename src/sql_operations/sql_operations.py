@@ -43,12 +43,17 @@ def execute_sql_script(db_name, user, password, host, port, script_path):
         print(f"Erro ao executar o script {script_path}: {error}")
         raise
 
-def get_script_path(script_name):
+def get_script_path(script_names):
     """
-    Constrói o caminho absoluto para um script SQL na pasta scripts_sql.
+    Constrói os caminhos absolutos para uma lista de scripts SQL na pasta scripts_sql.
     
-    :param script_name: Nome do arquivo de script SQL
-    :return: Caminho absoluto para o arquivo de script SQL
+    :param script_names: Lista com os nomes dos arquivos de scripts SQL
+    :return: Lista com os caminhos absolutos para os arquivos de scripts SQL
     """
-    # Caminho absoluto para o arquivo de script SQL.
-    return os.path.join('scripts_sql', script_name)
+    # Lista para armazenar os caminhos absolutos
+    script_paths = []
+    for script_name in script_names:
+        # Caminho absoluto para cada arquivo de script SQL.
+        script_paths.append(os.path.join('scripts_sql', script_name))
+    return script_paths
+
