@@ -67,3 +67,24 @@ WHERE EXISTS (
 
 -- SPA Clínico
 
+ALTER TABLE spa.spa_clinico
+ADD COLUMN fk_id_unidades_mac INTEGER
+;
+
+UPDATE spa.spa_clinico  
+SET unidade = 'Us 159 Policlinica Agamenon Magalhaes'
+WHERE unidade = 'PAM'
+;
+
+UPDATE spa.spa_clinico spacli
+SET fk_id_unidades_mac = (
+    SELECT tab_mac.id_unidades_mac
+    FROM ds_unidades.unidades_mac tab_mac
+    WHERE tab_mac.nome LIKE CONCAT('%', spacli.unidade, '%')
+)
+WHERE EXISTS (
+    SELECT 1
+    FROM ds_unidades.unidades_mac tab_mac 
+    WHERE tab_mac.nome LIKE CONCAT('%', spacli.unidade, '%')
+)
+;
