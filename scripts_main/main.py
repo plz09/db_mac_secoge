@@ -18,7 +18,7 @@ def db_connection(db_name, user, password, host, port):
 
 def process_data(schemas, engine):
     for schema, read_data_func in schemas.items():
-        if schema in ['mae_coruja', 'spa']:
+        if schema in ['mae_coruja', 'spa', 'maternidades']:
             read_data_func(engine)
         else:
             data = read_data_func()

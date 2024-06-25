@@ -22,16 +22,16 @@ FROM
 -- Define relacionamento entre unidades_mac e ditritos inserindo FK em unidades_mac
 
 ALTER TABLE ds_unidades.unidades_mac
-ADD COLUMN fk_distritos INTEGER
+ADD COLUMN fk_id_distritos INTEGER
 ;
 
 UPDATE ds_unidades.unidades_mac tab_mac
-SET fk_distritos = id_distritos
+SET fk_id_distritos = id_distritos
 FROM ds_unidades.distritos tab_ds
 WHERE tab_mac.distrito = tab_ds.ds
 ;
 
 ALTER TABLE ds_unidades.unidades_mac
-ADD CONSTRAINT fk_distritos FOREIGN KEY (fk_distritos) REFERENCES ds_unidades.distritos(id_distritos)
+ADD CONSTRAINT fk_id_distritos FOREIGN KEY (fk_id_distritos) REFERENCES ds_unidades.distritos(id_distritos)
 ;
   

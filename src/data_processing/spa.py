@@ -3,7 +3,8 @@ from ..utils.excel_operations import remove_espacos_e_acentos
 
 def process_spa_files(engine):
     path_matriz_GAH = 'data_bruto/SAP/MatrizGAH_GGAI_SECOGE.xlsx'
-    schema = 'spa'  # Defina o esquema onde as tabelas serão criadas
+    schema = 'spa'  
+
     abas_spa = [
         'SPA - Clínico',
         'SPA - Pediatria',
@@ -14,6 +15,7 @@ def process_spa_files(engine):
         'SPA - Classificação',
         'SPA - Odontologia'
     ]
+    
     for aba in abas_spa:
         try:
             df_spa_tratado = remove_espacos_e_acentos(path_matriz_GAH, aba)
