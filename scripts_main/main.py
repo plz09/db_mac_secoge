@@ -27,7 +27,7 @@ def process_data(schemas, engine):
                 write_df_to_sql(df, table_name, engine, schema)
 
 def run_scripts(db_name, user, password, host, port):
-    script_paths = get_script_path(['create_unidades_mac.sql', 'rel_unidades_mac.sql'])
+    script_paths = get_script_path(['create_unidades_mac.sql', 'rel_unidades_mac.sql', 'rel_horus.sql'])
     for script_path in script_paths:
         execute_sql_script(db_name, user, password, host, port, script_path)
 
