@@ -1,4 +1,4 @@
-from sqlalchemy import create_engine, Table, Column, Integer, BigInteger, Float, String, MetaData, text
+from sqlalchemy import create_engine, Table, Column, Integer, BigInteger, Float, String, MetaData, text, Date
 import pandas as pd
 import psycopg2
 
@@ -87,6 +87,8 @@ def write_df_to_sql(df, table_name, engine, schema, if_exists='replace'):
                 columns.append(Column(col_name, Integer))
         elif col_type == 'float64':
             columns.append(Column(col_name, Float))
+        elif col_type == 'datetime64':
+            columns.append(Column(col_name, Date))
         else:
             columns.append(Column(col_name, String))
 
