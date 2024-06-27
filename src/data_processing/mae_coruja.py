@@ -17,10 +17,10 @@ def process_mae_coruja_data(engine):
     df_mae_coruja_atividades = remove_espacos_e_acentos(path_mae_coruja_atividades, aba_selecionada=aba_atividades, skip_rows=11)
 
     data = {
-        'mae_coruja_mulher': df_mae_coruja_mulher,
-        'mae_coruja_crianca': df_mae_coruja_crianca,
-        'mae_coruja_kits_aba_2024': df_mae_coruja_kits,
-        'mae_coruja_atividades': df_mae_coruja_atividades
+        'mulher': df_mae_coruja_mulher,
+        'crianca': df_mae_coruja_crianca,
+        'kits': df_mae_coruja_kits,
+        'atividades': df_mae_coruja_atividades
     }
 
     schema = 'mae_coruja'

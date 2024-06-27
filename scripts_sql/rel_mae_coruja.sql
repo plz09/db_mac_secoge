@@ -56,16 +56,16 @@ DO $$
 DECLARE
     column_name text;
     columns_to_keep text[] := array[
-        'id_mae_coruja_atividades', 'no', 'secretaria', 'espaco', 'acao', 'data_inicio', 
+        'id_atividades', 'no', 'secretaria', 'espaco', 'acao', 'data_inicio', 
         'data_termino', 'presentes', 'convidados', 'observacao', 
         'sintese_da_acao', 'equipe_tecnica'
     ];
-    drop_columns_query text := 'ALTER TABLE mae_coruja.mae_coruja_atividades ';
+    drop_columns_query text := 'ALTER TABLE mae_coruja.atividades ';
 BEGIN
     FOR column_name IN 
         SELECT col.column_name
         FROM information_schema.columns col
-        WHERE col.table_name = 'mae_coruja_atividades' 
+        WHERE col.table_name = 'atividades' 
         AND col.table_schema = 'mae_coruja'
         AND col.column_name <> ALL(columns_to_keep)
     LOOP
@@ -82,28 +82,28 @@ END $$;
 
 -- Relacionamento de mae_coruja_atividades com mae_coruja.espacos
 
-ALTER TABLE mae_coruja.mae_coruja_atividades
+ALTER TABLE mae_coruja.atividades
 ADD COLUMN fk_id_espacos INTEGER
 ;
 
-UPDATE mae_coruja.mae_coruja_atividades mae_co_ativd 
+UPDATE mae_coruja.atividades mae_co_ativd 
 SET fk_id_espacos = mae_co_espacos.id_espacos
 FROM mae_coruja.espacos mae_co_espacos  
 WHERE mae_co_ativd.espaco LIKE CONCAT('%', mae_co_espacos.espaco, '%')
 ;
 
-ALTER TABLE mae_coruja.mae_coruja_atividades
+ALTER TABLE mae_coruja.atividades
 ADD CONSTRAINT fk_id_espacos FOREIGN KEY (fk_id_espacos) REFERENCES mae_coruja.espacos(id_espacos)
 ;
 
 -- Relacionamento de mae_coruja_kits com distritos
 
-ALTER TABLE mae_coruja.mae_coruja_kits_aba_2024
+ALTER TABLE mae_coruja.kits
 ADD COLUMN fk_id_distritos INTEGER
 ;
 
 
-UPDATE mae_coruja.mae_coruja_kits_aba_2024 kits 
+UPDATE mae_coruja.kits kits 
 SET fk_id_distritos = (
     SELECT ds.id_distritos
     FROM ds_unidades.distritos ds
@@ -117,7 +117,7 @@ WHERE EXISTS (
 
 
 
-ALTER TABLE mae_coruja.mae_coruja_kits_aba_2024
+ALTER TABLE mae_coruja.kits
 ADD CONSTRAINT fk_id_distritos FOREIGN KEY (fk_id_distritos) REFERENCES ds_unidades.distritos(id_distritos)
 ;
 
@@ -125,11 +125,11 @@ ADD CONSTRAINT fk_id_distritos FOREIGN KEY (fk_id_distritos) REFERENCES ds_unida
 
 -- Inserindo coluna ds na tabela mae coruja mulher para trazer chave estrangeira de distritos
 
-ALTER TABLE mae_coruja.mae_coruja_mulher
+ALTER TABLE mae_coruja.mulher
 ADD COLUMN ds VARCHAR
 ;
 
-UPDATE mae_coruja.mae_coruja_mulher
+UPDATE mae_coruja.mulher
 SET ds = 
     SUBSTRING(
         canto,
@@ -138,23 +138,23 @@ SET ds =
     );
 
 
-UPDATE mae_coruja.mae_coruja_mulher mulher 
+UPDATE mae_coruja.mulher mulher 
 SET ds = REPLACE(mulher.ds, 'Distrito', 'DS')
 ;
 
 -- Inserindo coluna fd_id_distritos em mae_coruja_mulher
 
-ALTER TABLE mae_coruja.mae_coruja_mulher
+ALTER TABLE mae_coruja.mulher
 ADD COLUMN fk_id_distritos INTEGER
 ;
 
-UPDATE mae_coruja.mae_coruja_mulher mulher 
+UPDATE mae_coruja.mulher mulher 
 SET fk_id_distritos = tab_ds.id_distritos
 FROM ds_unidades.distritos tab_ds  
 WHERE mulher.ds = tab_ds.distrito_sanitario
 ;
 
 
-ALTER TABLE mae_coruja.mae_coruja_mulher
+ALTER TABLE mae_coruja.mulher
 ADD CONSTRAINT fk_id_distritos FOREIGN KEY (fk_id_distritos) REFERENCES ds_unidades.distritos(id_distritos)
 ;
