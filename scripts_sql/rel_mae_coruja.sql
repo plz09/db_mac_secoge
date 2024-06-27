@@ -96,3 +96,26 @@ ALTER TABLE mae_coruja.mae_coruja_atividades
 ADD CONSTRAINT fk_id_espacos FOREIGN KEY (fk_id_espacos) REFERENCES mae_coruja.espacos(id_espacos)
 ;
 
+-- Relacionamento de mae_coruja_atividades com mae_coruja_kits
+
+ALTER TABLE mae_coruja.mae_coruja_kits_aba_2024
+ADD COLUMN fk_id_distritos INTEGER
+;
+
+UPDATE mae_coruja.mae_coruja_kits_aba_2024 kits 
+SET fk_id_distritos = (
+    SELECT tab_ds.id_distritos
+    FROM ds_unidades.distritos tab_ds
+    WHERE tab_ds.distrito_sanitario LIKE CONCAT('%', kits.espaco_mae_coruja, '%')
+)
+WHERE EXISTS (
+    SELECT 1
+    FROM ds_unidades.distritos tab_ds
+    WHERE tab_ds.distrito_sanitario LIKE CONCAT('%', kits.espaco_mae_coruja, '%')
+)
+;
+
+
+ALTER TABLE mae_coruja.mae_coruja_kits_aba_2024
+ADD CONSTRAINT fk_id_distritos FOREIGN KEY (fk_id_distritos) REFERENCES ds_unidades.distritos(id_distritos)
+;
