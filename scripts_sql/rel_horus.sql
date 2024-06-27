@@ -70,3 +70,17 @@ ADD CONSTRAINT fk_id_ref_anticoncep FOREIGN KEY (fk_id_ref_anticoncep) REFERENCE
 ;
 
 -- Relacionamento de ref_anticoncep com horus.historico_pacientes
+
+ALTER TABLE horus.historico_pacientes
+ADD COLUMN fk_id_ref_anticoncep INTEGER
+;
+
+UPDATE horus.historico_pacientes his
+SET fk_id_ref_anticoncep = id_ref_anticoncep
+FROM horus.ref_anticoncep ref 
+WHERE ref.codigo_produto = his.codigo_produto
+;
+
+ALTER TABLE horus.historico_pacientes
+ADD CONSTRAINT fk_id_ref_anticoncep FOREIGN KEY (fk_id_ref_anticoncep) REFERENCES horus.ref_anticoncep(id_ref_anticoncep)
+;
