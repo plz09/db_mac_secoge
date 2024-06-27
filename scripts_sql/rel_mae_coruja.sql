@@ -120,3 +120,41 @@ WHERE EXISTS (
 ALTER TABLE mae_coruja.mae_coruja_kits_aba_2024
 ADD CONSTRAINT fk_id_distritos FOREIGN KEY (fk_id_distritos) REFERENCES ds_unidades.distritos(id_distritos)
 ;
+
+-- Relacionamento de mae_coruja_mulher com distritos
+
+-- Inserindo coluna ds na tabela mae coruja mulher para trazer chave estrangeira de distritos
+
+ALTER TABLE mae_coruja.mae_coruja_mulher
+ADD COLUMN ds VARCHAR
+;
+
+UPDATE mae_coruja.mae_coruja_mulher
+SET ds = 
+    SUBSTRING(
+        canto,
+        POSITION(' - ' IN canto) + 3,
+        POSITION(' - ' IN SUBSTRING(canto FROM POSITION(' - ' IN canto) + 3)) - 1
+    );
+
+
+UPDATE mae_coruja.mae_coruja_mulher mulher 
+SET ds = REPLACE(mulher.ds, 'Distrito', 'DS')
+;
+
+-- Inserindo coluna fd_id_distritos em mae_coruja_mulher
+
+ALTER TABLE mae_coruja.mae_coruja_mulher
+ADD COLUMN fk_id_distritos INTEGER
+;
+
+UPDATE mae_coruja.mae_coruja_mulher mulher 
+SET fk_id_distritos = tab_ds.id_distritos
+FROM ds_unidades.distritos tab_ds  
+WHERE mulher.ds = tab_ds.distrito_sanitario
+;
+
+
+ALTER TABLE mae_coruja.mae_coruja_mulher
+ADD CONSTRAINT fk_id_distritos FOREIGN KEY (fk_id_distritos) REFERENCES ds_unidades.distritos(id_distritos)
+;
