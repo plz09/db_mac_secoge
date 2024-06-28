@@ -4,6 +4,7 @@
 
 -- Verificando valores faltantes em dcbo que existem em dport157
 
+/*
 SELECT 
     dcbo.cbo AS dcbo_cbo,
     CAST(dport.cbo AS TEXT) AS dport_cbo,
@@ -16,6 +17,7 @@ ON
     dcbo.cbo = CAST(dport.cbo AS TEXT)
 ;
 
+*/
 -- Inserindo valores faltantes
 
 INSERT INTO producao.dcbo (cbo, ds_cbo)
