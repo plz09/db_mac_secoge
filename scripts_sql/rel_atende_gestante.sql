@@ -1,4 +1,4 @@
--- Relacionamento de conectazap com 
+-- Tratamento da coluna conectazap
 
 DO $$
 DECLARE
@@ -24,17 +24,18 @@ BEGIN
 
     -- Execute a query dinâmica
     EXECUTE drop_columns_query;
-END $$;
+END $$
+;
 
 
-/*
+-- Remover valores inválidos (que não são datas válidas)
+DELETE FROM atende_gestante.conectazap
+WHERE NOT (data ~ '^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$')
+OR data IS NULL
+;
 
-COLUNA data: definir formato p/ data
-COLUNA whatsapp: definir formato p/ número inteiro
-COLUNA CNS: definir formato p/ número inteiro
-Há mais COLUNAS a ser removidas no banco de dados do que mantidas.
-MANTER COLUNAS: id_atende_gestante_conectazap, data, roomid, acessou_com:, nome, 
-whatsapp, transbordo_|_horario, encerrado_na_susi, avaliacao. As demais podem ser 
-removidas do banco de dados (mantidas só no Sharepoint)
+-- Converter a coluna para DATE
+ALTER TABLE atende_gestante.conectazap
+ALTER COLUMN data TYPE DATE USING CAST(data AS DATE)
+;
 
-*/
