@@ -1,5 +1,4 @@
 -- Definindo relacionametnos das tabelas de maternidade com unidades_mac
-
 -- Definindo relacionametnos das tabelas de mat_classificacao com unidades_mac
 -- HMR = Hospital Da Mulher Do Recife
 
@@ -29,6 +28,38 @@ ALTER TABLE maternidades.mat_classificacao
 ADD CONSTRAINT fk_id_unidades_mac FOREIGN KEY (fk_id_unidades_mac) REFERENCES ds_unidades.unidades_mac(id_unidades_mac)
 ;
 
+
+-- Dropando colunas da tabela mat_leitos
+
+ALTER TABLE maternidades.mat_leitos
+DROP COLUMN setor;
+
+-- Convertendo dados da coluna mat_leitos
+
+ALTER TABLE maternidades.mat_leitos
+ALTER COLUMN data TYPE date USING data::date
+;
+
+DO $$
+DECLARE
+    col_name TEXT;
+    cols TEXT[] := ARRAY[
+        'ac_leitoscnes', 'ac_pct_internados', 'ac_no_de_altas', 'ac_no_de_evasao', 
+        'ac_no_de_transf_externa', 'ac_no_de_obito', 'ema_pct_internados', 
+        'ema_leitoscnes', 'ema_leitos_op', 'ema_no_de_altas', 'ema_no_de_evasao', 
+        'ema_no_de_transf_externa', 'pp_pct_internados', 'pp_no_de_altas', 
+        'pp_no_de_evasao', 'pp_no_de_transf_externa', 'pp_no_de_obito', 
+        'cpn_pct_internados', 'cpn_leitos__cnes', 'cpn_leitos_op', 'cpn_no_de_altas', 
+        'cpn_no_de_evasao', 'cpn_no_de_transf_externa', 'cpn_no_de_obito', 
+        'berc__pct_internados', 'berc_leitos_op', 'berc__no_de_altas', 
+        'berc__no_de_evasao', 'berc__no_de_transf_externa'
+    ];
+BEGIN
+    FOREACH col_name IN ARRAY cols
+    LOOP
+        EXECUTE format('ALTER TABLE maternidades.mat_leitos ALTER COLUMN %I TYPE INTEGER USING CAST(%I AS INTEGER)', col_name, col_name);
+    END LOOP;
+END $$;
 
 -- Definindo relacionametnos das tabelas de mat_leitos com unidades_mac
 -- HMR = Hospital Da Mulher Do Recife
@@ -60,6 +91,29 @@ ADD CONSTRAINT fk_id_unidades_mac FOREIGN KEY (fk_id_unidades_mac) REFERENCES ds
 ;
 
 
+-- Dropando colunas de mat_procedi_atend
+
+ALTER TABLE maternidades.mat_procedi_atend
+DROP COLUMN procedimentos;
+
+-- Convertendo tipos de colunas de mat_procedi_atend
+
+DO $$
+DECLARE
+    col_name TEXT;
+    cols TEXT[] := ARRAY[
+        'nascido_vivo', 'bcg', 'teste_da_orelhinha', 'teste_do_olhinho', 
+        'teste_do_coracaozinho', 'teste_do_pezinho', 'servico_social', 
+        'teste_da_linguinha'
+    ];
+BEGIN
+    FOREACH col_name IN ARRAY cols
+    LOOP
+        EXECUTE format('ALTER TABLE maternidades.mat_procedi_atend ALTER COLUMN %I TYPE INTEGER USING CAST(%I AS INTEGER)', col_name, col_name);
+    END LOOP;
+END $$;
+
+
 -- Definindo relacionametnos das tabelas de mat_procedi_atend com unidades_mac
 
 ALTER TABLE maternidades.mat_procedi_atend
@@ -88,7 +142,30 @@ ALTER TABLE maternidades.mat_procedi_atend
 ADD CONSTRAINT fk_id_unidades_mac FOREIGN KEY (fk_id_unidades_mac) REFERENCES ds_unidades.unidades_mac(id_unidades_mac)
 ;
 
--- Definindo relacionametnos das tabelas de mat_triagem com unidades_mac
+-- Dropando colunas de mat_triagem
+
+ALTER TABLE maternidades.mat_triagem
+DROP COLUMN maternidade;
+
+-- Convertendo tipos de colunas de mat_triagem
+
+DO $$
+DECLARE
+    col_name TEXT;
+    cols TEXT[] := ARRAY[
+        'parto_normal_cpn', 'parto_normal_cob', 'parto_forceps', 'parto_cesarea', 
+        'curetagem', 'diu', 'transferencias', 
+        'altas', 'episiotomia', 'evasao'
+    ];
+BEGIN
+    FOREACH col_name IN ARRAY cols
+    LOOP
+        EXECUTE format('ALTER TABLE maternidades.mat_triagem ALTER COLUMN %I TYPE INTEGER USING CAST(%I AS INTEGER)', col_name, col_name);
+    END LOOP;
+END $$;
+
+-- -- Definindo relacionametnos das tabelas de mat_triagem com unidades_mac
+
 
 ALTER TABLE maternidades.mat_triagem
 ADD COLUMN fk_id_unidades_mac INTEGER
@@ -116,7 +193,30 @@ ALTER TABLE maternidades.mat_triagem
 ADD CONSTRAINT fk_id_unidades_mac FOREIGN KEY (fk_id_unidades_mac) REFERENCES ds_unidades.unidades_mac(id_unidades_mac)
 ;
 
+-- Dropando colunas de municipiosdeorigem
+
+ALTER TABLE maternidades.municipiosdeorigem
+DROP COLUMN maternidade;
+
+-- Convertendo tipos de colunas de mat_triagem
+
+DO $$
+DECLARE
+    col_name TEXT;
+    cols TEXT[] := ARRAY[
+        'recife', 'abreu_e_lima', 'cabo_de_santo_agostinho', 'camaragibe', 
+        'igarassu', 'jaboatao_dos_guararapes', 'olinda', 
+        'paulista', 'outros'
+    ];
+BEGIN
+    FOREACH col_name IN ARRAY cols
+    LOOP
+        EXECUTE format('ALTER TABLE maternidades.municipiosdeorigem ALTER COLUMN %I TYPE INTEGER USING CAST(%I AS INTEGER)', col_name, col_name);
+    END LOOP;
+END $$;
+
 -- Definindo relacionametnos das tabelas de municipiosdeorigem com unidades_mac
+
 
 ALTER TABLE maternidades.municipiosdeorigem
 ADD COLUMN fk_id_unidades_mac INTEGER
