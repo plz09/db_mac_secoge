@@ -39,15 +39,15 @@ ADD COLUMN fk_id_dformaorganiz INTEGER
 ;
 
 UPDATE producao.fproducao2024 fprod
-SET fk_id_dformaorganiz = id_dformaorganiz 
+SET fk_id_dformaorganiz = dform.id_dformaorganiz
 FROM producao.dformaorganiz dform
-WHERE dform.forma_org = fprod.pa_proc_id
+WHERE dform.forma_org = LEFT(fprod.pa_proc_id::TEXT, 5)::INTEGER
 ;
+
 
 ALTER TABLE producao.fproducao2024
-ADD CONSTRAINT fk_id_dformaorganiz FOREIGN KEY (fk_id_dformaorganiz) REFERENCES producao.formaorganiz(id_did_formaorganizcbo)
+ADD CONSTRAINT fk_id_dformaorganiz FOREIGN KEY (fk_id_dformaorganiz) REFERENCES producao.dformaorganiz(id_dformaorganiz)
 ;
-
 
 
 -- Rel com fprofissionais com unidades_mac
@@ -80,5 +80,42 @@ WHERE dcbo.cbo = fprof.cbo
 
 ALTER TABLE producao.fprofissionais
 ADD CONSTRAINT fk_id_dcbo FOREIGN KEY (fk_id_dcbo) REFERENCES producao.dcbo(id_dcbo)
+;
+
+
+-- Unificando dcbo com dport157
+
+-- Verificando valores faltantes em dcbo que existem em dport157
+
+SELECT 
+    dcbo.cbo AS dcbo_cbo,
+    CAST(dport.cbo AS TEXT) AS dport_cbo,
+	dport.especialidade
+FROM 
+    producao.dcbo dcbo
+RIGHT JOIN
+    producao.dport157 dport
+ON 
+    dcbo.cbo = CAST(dport.cbo AS TEXT)
+;
+
+-- Inserindo valores faltantes
+
+INSERT INTO producao.dcbo (cbo, ds_cbo)
+VALUES 
+('223117', 'MEDICO DERMATOLOGISTA HANSENOLOGO'),
+('223142', 'MEDICO NEUROPEDIATRA')
+;
+
+-- Insrindo coluna procedimentos
+
+ALTER TABLE producao.dcbo
+ADD COLUMN procedimentos INTEGER
+;
+
+UPDATE producao.dcbo dcbo
+SET procedimentos = dport.procedimentos
+FROM producao.dport157 dport
+WHERE dcbo.cbo = CAST(dport.cbo AS TEXT)
 ;
 
