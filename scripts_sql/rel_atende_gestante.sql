@@ -68,3 +68,43 @@ ALTER COLUMN suporte_ao_profissional_de_saude TYPE INTEGER USING CAST(suporte_ao
 ALTER COLUMN doulas TYPE INTEGER USING CAST(doulas AS INTEGER)
 ;
 
+
+-- Tratando tabela registros_teleatendimentos
+
+-- Remove valores inválidos (que não são datas válidas)
+DELETE FROM atende_gestante.registros_teleatendimentos
+WHERE NOT (carimbo_de_datahora ~ '^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$')
+OR carimbo_de_datahora IS NULL
+;
+
+-- Converte a coluna para DATE
+ALTER TABLE atende_gestante.registros_teleatendimentos
+ALTER COLUMN carimbo_de_datahora TYPE TIMESTAMP USING CAST(carimbo_de_datahora AS TIMESTAMP)
+;
+
+
+
+DELETE FROM atende_gestante.registros_teleatendimentos
+WHERE NOT (data_de_nascimento ~ '^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$')
+OR data_de_nascimento IS NULL
+;
+
+ALTER TABLE atende_gestante.registros_teleatendimentos
+ALTER COLUMN data_de_nascimento TYPE TIMESTAMP USING CAST(data_de_nascimento AS TIMESTAMP)
+;
+
+
+DELETE FROM atende_gestante.registros_teleatendimentos
+WHERE NOT (dum ~ '^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$')
+OR dum IS NULL
+;
+
+ALTER TABLE atende_gestante.registros_teleatendimentos
+ALTER COLUMN dum TYPE TIMESTAMP USING CAST(dum AS TIMESTAMP)
+;
+
+
+
+ALTER TABLE atende_gestante.registros_teleatendimentos
+ALTER COLUMN cns TYPE BIGINT USING CAST(cns AS BIGINT)
+;
