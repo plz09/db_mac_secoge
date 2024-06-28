@@ -59,7 +59,18 @@ FROM ds_unidades.unidades_mac tab_mac
 WHERE ouvi.codigo_unidade = tab_mac.codigo_unidade
 ;
 
-
 ALTER TABLE ouvidoria.ouvidoria
 ADD CONSTRAINT fk_id_unidades_mac FOREIGN KEY (fk_id_unidades_mac) REFERENCES ds_unidades.unidades_mac(id_unidades_mac)
+;
+
+-- COnvertendo tipo de colunas da tabela ouvidoria
+
+
+ALTER TABLE ouvidoria.ouvidoria
+ALTER COLUMN data_da_demanda TYPE DATE USING CAST(data_da_demanda AS DATE),
+ALTER COLUMN data_de_fechamento_da_demanda TYPE DATE USING CAST(data_de_fechamento_da_demanda AS DATE),
+ALTER COLUMN data_de_conclusao_efetiva TYPE DATE USING CAST(data_de_conclusao_efetiva AS DATE),
+ALTER COLUMN data_de_conclusao_prevista TYPE DATE USING CAST(data_de_conclusao_prevista AS DATE),
+ALTER COLUMN data_primeiro_destino_encaminhamento TYPE DATE USING CAST(data_primeiro_destino_encaminhamento AS DATE),
+ALTER COLUMN data_do_acomp_atual TYPE DATE USING CAST(data_do_acomp_atual AS DATE)
 ;
