@@ -14,7 +14,7 @@ def read_atbasica_data():
 
     return {
         'consulta_puericultura': df_ATBasica_puericultura,
-        'consulta_puerpural': df_ATBasica_puerperal,
+        'consulta_puerperal': df_ATBasica_puerperal,
         'consulta_prenatal': df_ATbasica_info_gestantes,
         'quantitativo_gestantes_acompanhadas': df_qttativos_gestantes_acompanhadas
     }

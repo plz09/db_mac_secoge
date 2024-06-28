@@ -1,20 +1,3 @@
--- Relacionamento de quantitativo_gestantes_acompanhadas com unidades_mac
-
-ALTER TABLE atende_gestante.qt_gest_acompanhadas
-ADD COLUMN fk_id_unidades_mac INTEGER
-;
-
-UPDATE atende_gestante.qt_gest_acompanhadas qt_gest
-SET fk_id_unidades_mac = id_unidades_mac
-FROM ds_unidades.unidades_mac tab_mac
-WHERE qt_gest.cnes = tab_mac.cnes_padrao
-;
-
-ALTER TABLE atende_gestante.qt_gest_acompanhadas
-ADD CONSTRAINT fk_id_unidades_mac FOREIGN KEY (fk_id_unidades_mac) REFERENCES ds_unidades.unidades_mac(id_unidades_mac)
-;
-
-
 
 -- Tratamento da coluna conectazap
 

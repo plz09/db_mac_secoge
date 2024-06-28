@@ -4,7 +4,6 @@ from ..utils.excel_operations import remove_espacos_e_acentos
 def read_atende_gestante_data():
     path_atende_gestante_registro_teleatendimentos = 'data_bruto/Atende_Gestante/registros_teleatendimento.xlsx'
     path_avaliacao_diaria = 'data_bruto/Atende_Gestante/avaliacao_diaria.xlsx'
-    path_quantitativa_gestante_acompanhadas = 'data_bruto/Atende_Gestante/Quantitativo_de_Gestantes_Acompanhadas.xlsx'
     
     path_atende_gestante_conectazap = 'data_bruto/Atende_Gestante/CONECTAZAP - SAUDE - RELATÓRIOS CONECTAZAP.xlsx'
     aba_atende_gestante = 'ATENDE GESTANTE'
@@ -13,12 +12,10 @@ def read_atende_gestante_data():
     df_atende_gestante_registro_teleatendimentos = remove_espacos_e_acentos(path_atende_gestante_registro_teleatendimentos)
     df_avaliacao_diaria = remove_espacos_e_acentos(path_avaliacao_diaria)
     df_atende_gestante_conectazap = remove_espacos_e_acentos(path_atende_gestante_conectazap, aba_selecionada=aba_atende_gestante)
-    df_quantitativo_gestante_acompanhadas = remove_espacos_e_acentos(path_quantitativa_gestante_acompanhadas)
 
     return {
         'registros_teleatendimentos': df_atende_gestante_registro_teleatendimentos,
         'avaliacao_diaria': df_avaliacao_diaria,
-        'conectazap': df_atende_gestante_conectazap,
-        'qt_gest_acompanhadas': df_quantitativo_gestante_acompanhadas
+        'conectazap': df_atende_gestante_conectazap
     }
 
