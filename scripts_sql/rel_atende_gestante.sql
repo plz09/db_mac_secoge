@@ -39,3 +39,32 @@ ALTER TABLE atende_gestante.conectazap
 ALTER COLUMN data TYPE DATE USING CAST(data AS DATE)
 ;
 
+
+-- Tratando tabela avaliacao_diaria
+
+DELETE FROM atende_gestante.avaliacao_diaria
+WHERE NOT (data ~ '^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$')
+OR data IS NULL
+;
+
+-- Converter a coluna para DATE
+ALTER TABLE atende_gestante.avaliacao_diaria
+ALTER COLUMN data TYPE DATE USING CAST(data AS DATE)
+;
+
+
+-- Convertendos demais colunas para INTEGER
+
+ALTER TABLE atende_gestante.avaliacao_diaria
+ALTER COLUMN geral TYPE INTEGER USING CAST(geral AS INTEGER)
+;
+
+ALTER TABLE atende_gestante.avaliacao_diaria
+ALTER COLUMN recepcao_digital TYPE INTEGER USING CAST(recepcao_digital AS INTEGER),
+ALTER COLUMN teleconsulta_total TYPE INTEGER USING CAST(teleconsulta_total AS INTEGER),
+ALTER COLUMN teleconsulta_efetivadas TYPE INTEGER USING CAST(teleconsulta_efetivadas AS INTEGER),
+ALTER COLUMN telemonitoramento_com_sucesso TYPE INTEGER USING CAST(telemonitoramento_com_sucesso AS INTEGER),
+ALTER COLUMN suporte_ao_profissional_de_saude TYPE INTEGER USING CAST(suporte_ao_profissional_de_saude AS INTEGER),
+ALTER COLUMN doulas TYPE INTEGER USING CAST(doulas AS INTEGER)
+;
+
