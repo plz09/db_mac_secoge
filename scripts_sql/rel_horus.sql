@@ -1,7 +1,32 @@
--- Alterando tipo de data na coluna Data da tabela horus_dispensa_medicamento
+-- Alterando tipos nas colunas das tabelas horus
 
 ALTER TABLE horus.dispensa_medicamentos
 ALTER COLUMN data TYPE date USING data::date
+;
+
+
+ALTER TABLE horus.historico_pacientes
+ALTER COLUMN data_saida TYPE date USING data_saida::date
+;
+
+-- Dropando colunas desnecessárias
+
+ALALTER TABLE horus.historico_pacientes
+DROP COLUMN cartao_sus,
+DROP COLUMN paciente,
+DROP COLUMN data_nascimento,
+DROP COLUMN sexo,
+DROP COLUMN data_cadastro,
+DROP COLUMN codigo_programa,
+DROP COLUMN programa
+;
+
+
+ALTER TABLE horus.dispensa_medicamentos
+DROP COLUMN nome_produto,
+DROP COLUMN unidade_produto,
+DROP COLUMN programa_de_saude,
+DROP COLUMN ds_unid_solicitante
 ;
 
 -- Relacionametno de horus.dispensa_medicamentos com unidades_mac

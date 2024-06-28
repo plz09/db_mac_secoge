@@ -65,6 +65,7 @@ ALTER COLUMN recepcao_digital TYPE INTEGER USING CAST(recepcao_digital AS INTEGE
 ALTER COLUMN teleconsulta_total TYPE INTEGER USING CAST(teleconsulta_total AS INTEGER),
 ALTER COLUMN teleconsulta_efetivadas TYPE INTEGER USING CAST(teleconsulta_efetivadas AS INTEGER),
 ALTER COLUMN telemonitoramento_com_sucesso TYPE INTEGER USING CAST(telemonitoramento_com_sucesso AS INTEGER),
+ALTER COLUMN telemonitoramento_sem_sucesso TYPE INTEGER USING CAST(telemonitoramento_sem_sucesso AS INTEGER),
 ALTER COLUMN suporte_ao_profissional_de_saude TYPE INTEGER USING CAST(suporte_ao_profissional_de_saude AS INTEGER),
 ALTER COLUMN doulas TYPE INTEGER USING CAST(doulas AS INTEGER)
 ;
