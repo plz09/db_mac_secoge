@@ -17,6 +17,15 @@ ALTER TABLE mae_coruja.espacos
 ADD CONSTRAINT fk_id_distritos FOREIGN KEY (fk_id_distritos) REFERENCES ds_unidades.distritos(id_distritos)
 ;
 
+
+-- Dropando colunas desnecessárias
+
+ALTER TABLE mae_coruja.espacos
+DROP COLUMN bairros_cobertos,
+DROP COLUMN unidades_cobertas
+;
+
+
 -- Relacionamento de mae_coruja.espacos_bairros_cobertos com ds_unidades.distritos
 
 ALTER TABLE mae_coruja.espacos_bairros_cobertos
@@ -48,6 +57,12 @@ WHERE espac_uni.usf_cnes = tab_mac.cnes_padrao
 
 ALTER TABLE mae_coruja.espacos_unidades
 ADD CONSTRAINT fk_id_unidades_mac FOREIGN KEY (fk_id_unidades_mac) REFERENCES ds_unidades.unidades_mac(id_unidades_mac)
+;
+
+-- Convertendo tipo de colunas da tabela espacos_unidades
+
+ALTER TABLE mae_coruja.espacos_unidades
+ALTER COLUMN usf_cnes TYPE INTEGER USING usf_cnes::INTEGER
 ;
 
 -- Dropando colunas da tabela mae_coruja_atividades
@@ -115,8 +130,6 @@ WHERE EXISTS (
     WHERE ds.distrito_sanitario = LEFT(kits.espaco_mae_coruja, 7)
 );
 
-
-
 ALTER TABLE mae_coruja.kits
 ADD CONSTRAINT fk_id_distritos FOREIGN KEY (fk_id_distritos) REFERENCES ds_unidades.distritos(id_distritos)
 ;
@@ -158,3 +171,4 @@ WHERE mulher.ds = tab_ds.distrito_sanitario
 ALTER TABLE mae_coruja.mulher
 ADD CONSTRAINT fk_id_distritos FOREIGN KEY (fk_id_distritos) REFERENCES ds_unidades.distritos(id_distritos)
 ;
+

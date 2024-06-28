@@ -11,7 +11,7 @@ ALTER COLUMN data_saida TYPE date USING data_saida::date
 
 -- Dropando colunas desnecessárias
 
-ALALTER TABLE horus.historico_pacientes
+ALTER TABLE horus.historico_pacientes
 DROP COLUMN cartao_sus,
 DROP COLUMN paciente,
 DROP COLUMN data_nascimento,
