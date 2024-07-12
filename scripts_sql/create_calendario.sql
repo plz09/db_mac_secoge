@@ -57,3 +57,10 @@ BEGIN
         );
     END LOOP;
 END $$;
+
+
+-- Criando tabela ano_mes_cadastro para relacionamento com mae_coruja 
+
+ALTER TABLE calendario.calendario ADD COLUMN ano_mes CHAR(7);
+UPDATE calendario.calendario
+SET ano_mes = TO_CHAR(data_dma, 'YYYY-MM');

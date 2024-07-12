@@ -173,15 +173,7 @@ ADD CONSTRAINT fk_id_distritos FOREIGN KEY (fk_id_distritos) REFERENCES ds_unida
 ;
 
 
--- Criando tabela ano_mes_cadastro 
-
-ALTER TABLE calendario.calendario ADD COLUMN ano_mes CHAR(7);
-UPDATE calendario.calendario
-SET ano_mes = TO_CHAR(data_dma, 'YYYY-MM');
-
-
-
--- Adicionar a coluna ano_mes_cadastro
+-- Adicionar a coluna ano_mes_cadastro para relacionamento com calendario
 ALTER TABLE mae_coruja.mulher ADD COLUMN ano_mes_cadastro CHAR(7);
 UPDATE mae_coruja.mulher
 SET ano_mes_cadastro = 
