@@ -173,6 +173,36 @@ ADD CONSTRAINT fk_id_distritos FOREIGN KEY (fk_id_distritos) REFERENCES ds_unida
 ;
 
 
+-- Criando tabela ano_mes_cadastro 
+
+ALTER TABLE calendario.calendario ADD COLUMN ano_mes CHAR(7);
+UPDATE calendario.calendario
+SET ano_mes = TO_CHAR(data_dma, 'YYYY-MM');
+
+
+
+-- Adicionar a coluna ano_mes_cadastro
+ALTER TABLE mae_coruja.mulher ADD COLUMN ano_mes_cadastro CHAR(7);
+UPDATE mae_coruja.mulher
+SET ano_mes_cadastro = 
+    ano_cadastro || '-' || 
+    CASE
+        WHEN mes_cadastro = 'jan' THEN '01'
+        WHEN mes_cadastro = 'fev' THEN '02'
+        WHEN mes_cadastro = 'mar' THEN '03'
+        WHEN mes_cadastro = 'abr' THEN '04'
+        WHEN mes_cadastro = 'mai' THEN '05'
+        WHEN mes_cadastro = 'jun' THEN '06'
+        WHEN mes_cadastro = 'jul' THEN '07'
+        WHEN mes_cadastro = 'ago' THEN '08'
+        WHEN mes_cadastro = 'set' THEN '09'
+        WHEN mes_cadastro = 'out' THEN '10'
+        WHEN mes_cadastro = 'nov' THEN '11'
+        WHEN mes_cadastro = 'dez' THEN '12'
+    END;
+
+
+
 -- Rel mae_coruja.mulher com calendario
 
 ALTER TABLE mae_coruja.mulher
@@ -182,7 +212,7 @@ ADD COLUMN fk_id_calendario INTEGER
 UPDATE mae_coruja.mulher mulher 
 SET fk_id_calendario = calend.id_calendario 
 FROM calendario.calendario calend
-WHERE (mulher.ano_cadastro = calend.ano AND mulher.mes_cadastro = calend.mes_abreviado)
+WHERE mulher.ano_mes_cadastro = calend.ano_mes
 ;
 
 
