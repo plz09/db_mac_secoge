@@ -250,3 +250,15 @@ ADD CONSTRAINT fk_id_calendario_crianca FOREIGN KEY (fk_id_calendario_crianca) R
 ;
 
 
+
+
+ALTER TABLE mae_coruja.atividades ADD COLUMN data_inicio_new DATE;
+UPDATE mae_coruja.atividades
+SET data_inicio_new = DATE(data_inicio)
+;
+
+ALTER TABLE mae_coruja.atividades DROP COLUMN data_inicio
+;
+ALTER TABLE mae_coruja.atividades RENAME COLUMN data_inicio_new TO data_inicio
+;
+
