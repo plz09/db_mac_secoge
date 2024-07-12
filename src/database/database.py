@@ -28,7 +28,8 @@ def create_schemas(db_name, user, password, host='localhost', port=5432):
         "CREATE SCHEMA IF NOT EXISTS atbasica",
         "CREATE SCHEMA IF NOT EXISTS ds_unidades",
         "CREATE SCHEMA IF NOT EXISTS spa",
-        "CREATE SCHEMA IF NOT EXISTS maternidades"
+        "CREATE SCHEMA IF NOT EXISTS maternidades",
+        "CREATE SCHEMA IF NOT EXISTS calendario"
     ]
 
     try:
