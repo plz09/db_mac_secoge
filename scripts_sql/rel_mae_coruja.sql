@@ -173,80 +173,16 @@ ADD CONSTRAINT fk_id_distritos FOREIGN KEY (fk_id_distritos) REFERENCES ds_unida
 ;
 
 
--- Criando Tabela calendario_mulher
-
-CREATE TABLE calendario.calendario (
-    id_calendario SERIAL PRIMARY KEY,
-    data_dma DATE,
-    ano INTEGER,
-    mes INTEGER,
-    dia INTEGER,
-    nome_dia VARCHAR(20),
-    dia_semana INTEGER,
-    mes_abreviado VARCHAR(3),
-    quadrimestre INTEGER,
-    ano_quadrimestre VARCHAR(7),
-    mes_completo VARCHAR(20),
-    mvm VARCHAR(6)
-);
-
-DO $$ 
-DECLARE
-    dia DATE;
-BEGIN
-    FOR dia IN 
-        SELECT generate_series('2022-01-01'::date, '2025-12-31'::date, '1 day') AS Date
-    LOOP
-        INSERT INTO calendario.calendario (
-            data_dma,
-            ano,
-            mes,
-            dia,
-            nome_dia,
-            dia_semana,
-            mes_abreviado,
-            quadrimestre,
-            ano_quadrimestre,
-            mes_completo,
-            mvm
-        ) VALUES (
-            dia,
-            EXTRACT(YEAR FROM dia),
-            EXTRACT(MONTH FROM dia),
-            EXTRACT(DAY FROM dia),
-            TO_CHAR(dia, 'FMDay'),
-            EXTRACT(DOW FROM dia),
-            TO_CHAR(dia, 'Mon'),
-            CASE
-                WHEN EXTRACT(MONTH FROM dia) IN (1, 2, 3) THEN 1
-                WHEN EXTRACT(MONTH FROM dia) IN (4, 5, 6) THEN 2
-                WHEN EXTRACT(MONTH FROM dia) IN (7, 8, 9) THEN 3
-                WHEN EXTRACT(MONTH FROM dia) IN (10, 11, 12) THEN 4
-            END,
-            TO_CHAR(dia, 'YYYY') || '-Q' || CASE
-                WHEN EXTRACT(MONTH FROM dia) IN (1, 2, 3) THEN '1'
-                WHEN EXTRACT(MONTH FROM dia) IN (4, 5, 6) THEN '2'
-                WHEN EXTRACT(MONTH FROM dia) IN (7, 8, 9) THEN '3'
-                WHEN EXTRACT(MONTH FROM dia) IN (10, 11, 12) THEN '4'
-            END,
-            TO_CHAR(dia, 'FMMonth YYYY'),
-            TO_CHAR(dia, 'YYYYMM')
-        );
-    END LOOP;
-END $$;
-
-
-
--- Rel mae_coruja.mulher com mae_coruja.calendario_mulher
+-- Rel mae_coruja.mulher com calendario
 
 ALTER TABLE mae_coruja.mulher
 ADD COLUMN fk_id_calendario INTEGER
 ;
 
 UPDATE mae_coruja.mulher mulher 
-SET fk_id_calendario = calendario.id_calendario
-FROM calendario.calendario 
-WHERE mulher.ano_cadastro = calendario.ano AND mulher.mes_cadastro = calendario.mes_abreviado
+SET fk_id_calendario = calend.id_calendario 
+FROM calendario.calendario calend
+WHERE (mulher.ano_cadastro = calend.ano AND mulher.mes_cadastro = calend.mes_abreviado)
 ;
 
 
