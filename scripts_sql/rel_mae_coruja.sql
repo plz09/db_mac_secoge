@@ -122,12 +122,12 @@ UPDATE mae_coruja.kits kits
 SET fk_id_distritos = (
     SELECT ds.id_distritos
     FROM ds_unidades.distritos ds
-    WHERE ds.distrito_sanitario = LEFT(kits.espaco_mae_coruja, 7)
+    WHERE ds.distrito_sanitario = regexp_replace(espaco_mae_coruja, ' - .*', '')
 )
 WHERE EXISTS (
     SELECT 1
     FROM ds_unidades.distritos ds
-    WHERE ds.distrito_sanitario = LEFT(kits.espaco_mae_coruja, 7)
+    WHERE ds.distrito_sanitario = regexp_replace(espaco_mae_coruja, ' - .*', '')
 );
 
 ALTER TABLE mae_coruja.kits
