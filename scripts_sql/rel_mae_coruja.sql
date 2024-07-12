@@ -249,8 +249,12 @@ ALTER TABLE mae_coruja.crianca
 ADD CONSTRAINT fk_id_calendario_crianca FOREIGN KEY (fk_id_calendario_crianca) REFERENCES calendario.calendario(id_calendario)
 ;
 
+-- Limpeza de dados na tabela atividades
 
+DELETE FROM mae_coruja.atividades
+WHERE acao IS NULL;
 
+-- Relacionamento Atividades e calendario
 
 ALTER TABLE mae_coruja.atividades ADD COLUMN data_inicio_new DATE;
 UPDATE mae_coruja.atividades
@@ -262,3 +266,18 @@ ALTER TABLE mae_coruja.atividades DROP COLUMN data_inicio
 ALTER TABLE mae_coruja.atividades RENAME COLUMN data_inicio_new TO data_inicio
 ;
 
+
+ALTER TABLE mae_coruja.atividades
+ADD COLUMN fk_id_calendario_atividades INTEGER
+;
+
+UPDATE mae_coruja.atividades atividades 
+SET fk_id_calendario_atividades = calend.id_calendario 
+FROM calendario.calendario calend
+WHERE atividades.data_inicio = calend.data_dma
+;
+
+
+ALTER TABLE mae_coruja.atividades
+ADD CONSTRAINT fk_id_calendario_atividades FOREIGN KEY (fk_id_calendario_atividades) REFERENCES calendario.calendario(id_calendario)
+;
