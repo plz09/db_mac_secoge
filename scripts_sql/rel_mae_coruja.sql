@@ -173,7 +173,7 @@ ADD CONSTRAINT fk_id_distritos FOREIGN KEY (fk_id_distritos) REFERENCES ds_unida
 ;
 
 
--- Adicionar a coluna ano_mes_cadastro para relacionamento com calendario
+-- Adicionar a coluna ano_mes_cadastro em mulher para relacionamento com calendario
 ALTER TABLE mae_coruja.mulher ADD COLUMN ano_mes_cadastro CHAR(7);
 UPDATE mae_coruja.mulher
 SET ano_mes_cadastro = 
@@ -198,16 +198,55 @@ SET ano_mes_cadastro =
 -- Rel mae_coruja.mulher com calendario
 
 ALTER TABLE mae_coruja.mulher
-ADD COLUMN fk_id_calendario INTEGER
+ADD COLUMN fk_id_calendario_mulher INTEGER
 ;
 
 UPDATE mae_coruja.mulher mulher 
-SET fk_id_calendario = calend.id_calendario 
+SET fk_id_calendario_mulher = calend.id_calendario 
 FROM calendario.calendario calend
 WHERE mulher.ano_mes_cadastro = calend.ano_mes
 ;
 
 
 ALTER TABLE mae_coruja.mulher
-ADD CONSTRAINT fk_id_calendario FOREIGN KEY (fk_id_calendario) REFERENCES calendario.calendario(id_calendario)
+ADD CONSTRAINT fk_id_calendario_mulher FOREIGN KEY (fk_id_calendario_mulher) REFERENCES calendario.calendario(id_calendario)
 ;
+
+-- Ajustar coluna dt_nascimento apra criar relacionamento com calendario
+
+ALTER TABLE mae_coruja.crianca ADD COLUMN dt_nascimento_new DATE;
+
+UPDATE mae_coruja.crianca
+SET dt_nascimento_new = TO_DATE(dt_nascimento, 'DD/MM/YYYY')
+WHERE dt_nascimento ~ '^\d{2}/\d{2}/\d{4}$'
+;
+
+UPDATE mae_coruja.crianca
+SET dt_nascimento_new = NULL
+WHERE dt_nascimento !~ '^\d{2}/\d{2}/\d{4}$'
+;
+
+ALTER TABLE mae_coruja.crianca DROP COLUMN dt_nascimento
+;
+ALTER TABLE mae_coruja.crianca RENAME COLUMN dt_nascimento_new TO dt_nascimento
+;
+
+
+--Criar relacao calendario com criança
+
+ALTER TABLE mae_coruja.crianca
+ADD COLUMN fk_id_calendario_crianca INTEGER
+;
+
+UPDATE mae_coruja.crianca crianca 
+SET fk_id_calendario_crianca = calend.id_calendario 
+FROM calendario.calendario calend
+WHERE crianca.dt_nascimento = calend.data_dma
+;
+
+
+ALTER TABLE mae_coruja.crianca
+ADD CONSTRAINT fk_id_calendario_crianca FOREIGN KEY (fk_id_calendario_crianca) REFERENCES calendario.calendario(id_calendario)
+;
+
+
