@@ -1,4 +1,4 @@
-CREATE VIEW mae_coruja.envios_por_mes AS
+CREATE VIEW mae_coruja.kits_enviados_por_mes_por_espaco AS
 SELECT
     mes_envio AS mes,
 	espaco_mae_coruja,
