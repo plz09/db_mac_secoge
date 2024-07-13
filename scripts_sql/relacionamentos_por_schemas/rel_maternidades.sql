@@ -270,6 +270,33 @@ ALTER TABLE maternidades.mat_triagem
 ADD CONSTRAINT fk_id_unidades_mac FOREIGN KEY (fk_id_unidades_mac) REFERENCES ds_unidades.unidades_mac(id_unidades_mac)
 ;
 
+-- Definindo relacionamento de mat_triagem com calendario
+
+ALTER TABLE maternidades.mat_triagem ADD COLUMN data_new DATE;
+UPDATE maternidades.mat_triagem
+SET data_new = TO_DATE('1899-12-30', 'YYYY-MM-DD') + (data::integer)
+;
+
+ALTER TABLE maternidades.mat_triagem DROP COLUMN data
+;
+
+-- Aqui começa a definição do relacionamento
+
+ALTER TABLE maternidades.mat_triagem
+ADD COLUMN fk_id_calendario_mat_triagem INTEGER
+;
+
+UPDATE maternidades.mat_triagem triagem 
+SET fk_id_calendario_mat_triagem = calend.id_calendario 
+FROM calendario.calendario calend
+WHERE triagem.data_new = calend.data_dma
+;
+
+
+ALTER TABLE maternidades.mat_triagem
+ADD CONSTRAINT fk_id_calendario_mat_triagem FOREIGN KEY (fk_id_calendario_mat_triagem) REFERENCES calendario.calendario(id_calendario)
+;
+
 -- Dropando colunas de municipiosdeorigem
 
 ALTER TABLE maternidades.municipiosdeorigem
@@ -322,3 +349,31 @@ ADD CONSTRAINT fk_id_unidades_mac FOREIGN KEY (fk_id_unidades_mac) REFERENCES ds
 ;
 
 
+-- Definindo relacionamento de municipiosdeorigem com calendario
+
+--select * from maternidades.municipiosdeorigem;
+
+ALTER TABLE maternidades.municipiosdeorigem ADD COLUMN data_new DATE;
+UPDATE maternidades.municipiosdeorigem
+SET data_new = TO_DATE('1899-12-30', 'YYYY-MM-DD') + (data::integer)
+;
+
+ALTER TABLE maternidades.municipiosdeorigem DROP COLUMN data
+;
+
+-- Aqui começa a definição do relacionamento
+
+ALTER TABLE maternidades.municipiosdeorigem
+ADD COLUMN fk_id_calendario_mat_municipiosdeorigem INTEGER
+;
+
+UPDATE maternidades.municipiosdeorigem muni 
+SET fk_id_calendario_mat_municipiosdeorigem = calend.id_calendario 
+FROM calendario.calendario calend
+WHERE muni.data_new = calend.data_dma
+;
+
+
+ALTER TABLE maternidades.municipiosdeorigem
+ADD CONSTRAINT fk_id_calendario_mat_municipiosdeorigem FOREIGN KEY (fk_id_calendario_mat_municipiosdeorigem) REFERENCES calendario.calendario(id_calendario)
+;
