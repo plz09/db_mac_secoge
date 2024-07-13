@@ -32,10 +32,10 @@ ADD CONSTRAINT fk_id_unidades_mac FOREIGN KEY (fk_id_unidades_mac) REFERENCES ds
 
 ALTER TABLE maternidades.mat_classificacao ADD COLUMN data_new DATE;
 UPDATE maternidades.mat_classificacao
-SET data_new = TO_DATE('1899-12-30', 'YYYY-MM-DD') + (data_serial::integer)
+SET data_new = TO_DATE('1899-12-30', 'YYYY-MM-DD') + (data::integer)
 ;
 
-ALTER TABLE mimaternidades.mat_classificacaonha_tabela DROP COLUMN data
+ALTER TABLE maternidades.mat_classificacao DROP COLUMN data
 ;
 
 -- Relacionamento de mat_classificacao com Calendario
@@ -120,6 +120,23 @@ ADD CONSTRAINT fk_id_unidades_mac FOREIGN KEY (fk_id_unidades_mac) REFERENCES ds
 ;
 
 
+-- Criando relacionamento de mat_leitos e calendario
+
+ALTER TABLE maternidades.mat_leitos
+ADD COLUMN fk_id_calendario_mat_leitos INTEGER
+;
+
+UPDATE maternidades.mat_leitos leitos 
+SET fk_id_calendario_mat_leitos = calend.id_calendario 
+FROM calendario.calendario calend
+WHERE leitos.data = calend.data_dma
+;
+
+
+ALTER TABLE maternidades.mat_leitos
+ADD CONSTRAINT fk_id_calendario_mat_leitos FOREIGN KEY (fk_id_calendario_mat_leitos) REFERENCES calendario.calendario(id_calendario)
+;
+
 -- Dropando colunas de mat_procedi_atend
 
 ALTER TABLE maternidades.mat_procedi_atend
@@ -170,6 +187,37 @@ WHERE EXISTS (
 ALTER TABLE maternidades.mat_procedi_atend 
 ADD CONSTRAINT fk_id_unidades_mac FOREIGN KEY (fk_id_unidades_mac) REFERENCES ds_unidades.unidades_mac(id_unidades_mac)
 ;
+
+
+-- Criando relacionamentos de mat_procedi_atend e calendario
+
+-- Tratar coluna data primeiro
+
+ALTER TABLE maternidades.mat_procedi_atend ADD COLUMN data_new DATE;
+UPDATE maternidades.mat_procedi_atend
+SET data_new = TO_DATE('1899-12-30', 'YYYY-MM-DD') + (data::integer)
+;
+
+ALTER TABLE maternidades.mat_procedi_atend DROP COLUMN data
+;
+
+-- Aqui começa a definição do relacionamento
+
+ALTER TABLE maternidades.mat_procedi_atend
+ADD COLUMN fk_id_calendario_mat_procedi_atend INTEGER
+;
+
+UPDATE maternidades.mat_procedi_atend proced 
+SET fk_id_calendario_mat_procedi_atend = calend.id_calendario 
+FROM calendario.calendario calend
+WHERE proced.data_new = calend.data_dma
+;
+
+
+ALTER TABLE maternidades.mat_procedi_atend
+ADD CONSTRAINT fk_id_calendario_mat_procedi_atend FOREIGN KEY (fk_id_calendario_mat_procedi_atend) REFERENCES calendario.calendario(id_calendario)
+;
+
 
 -- Dropando colunas de mat_triagem
 
