@@ -7,6 +7,7 @@ from .atende_gestante import read_atende_gestante_data
 from .atbasica import read_atbasica_data
 from .spa import process_spa_files
 from .maternidades import process_maternidades_files
+from .obras import read_obras_data
 
 def get_data_processing_functions():
     return {
@@ -18,5 +19,6 @@ def get_data_processing_functions():
         'atende_gestante': read_atende_gestante_data,
         'atbasica': read_atbasica_data,
         'spa': process_spa_files,
-        'maternidades': process_maternidades_files
+        'maternidades': process_maternidades_files,
+        'obras': read_obras_data
     }
