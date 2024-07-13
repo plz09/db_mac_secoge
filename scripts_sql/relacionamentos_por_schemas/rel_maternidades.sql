@@ -28,6 +28,33 @@ ALTER TABLE maternidades.mat_classificacao
 ADD CONSTRAINT fk_id_unidades_mac FOREIGN KEY (fk_id_unidades_mac) REFERENCES ds_unidades.unidades_mac(id_unidades_mac)
 ;
 
+-- Convertendo dados da coluna mat_classificacao
+
+ALTER TABLE maternidades.mat_classificacao ADD COLUMN data_new DATE;
+UPDATE maternidades.mat_classificacao
+SET data_new = TO_DATE('1899-12-30', 'YYYY-MM-DD') + (data_serial::integer)
+;
+
+ALTER TABLE mimaternidades.mat_classificacaonha_tabela DROP COLUMN data
+;
+
+-- Relacionamento de mat_classificacao com Calendario
+
+ALTER TABLE maternidades.mat_classificacao
+ADD COLUMN fk_id_calendario_mat_classificacao INTEGER
+;
+
+UPDATE maternidades.mat_classificacao mat_class 
+SET fk_id_calendario_mat_classificacao = calend.id_calendario 
+FROM calendario.calendario calend
+WHERE mat_class.data_new = calend.data_dma
+;
+
+
+ALTER TABLE maternidades.mat_classificacao
+ADD CONSTRAINT fk_id_calendario_mat_classificacao FOREIGN KEY (fk_id_calendario_mat_classificacao) REFERENCES calendario.calendario(id_calendario)
+;
+
 
 -- Dropando colunas da tabela mat_leitos
 
@@ -39,6 +66,8 @@ DROP COLUMN setor;
 ALTER TABLE maternidades.mat_leitos
 ALTER COLUMN data TYPE date USING data::date
 ;
+
+
 
 DO $$
 DECLARE
@@ -243,3 +272,5 @@ WHERE EXISTS (
 ALTER TABLE maternidades.municipiosdeorigem 
 ADD CONSTRAINT fk_id_unidades_mac FOREIGN KEY (fk_id_unidades_mac) REFERENCES ds_unidades.unidades_mac(id_unidades_mac)
 ;
+
+
