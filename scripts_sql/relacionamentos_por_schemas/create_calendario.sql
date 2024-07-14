@@ -10,7 +10,7 @@ CREATE TABLE calendario.calendario (
     quadrimestre INTEGER,
     ano_quadrimestre VARCHAR(7),
     mes_completo VARCHAR(20),
-    mvm VARCHAR(6)
+    mvm INTEGER
 );
 
 DO $$ 
@@ -53,11 +53,10 @@ BEGIN
                 WHEN EXTRACT(MONTH FROM dia) IN (10, 11, 12) THEN '4'
             END,
             TO_CHAR(dia, 'FMMonth YYYY'),
-            TO_CHAR(dia, 'YYYYMM')
+            TO_NUMBER(TO_CHAR(dia, 'YYYYMM'), '999999')
         );
     END LOOP;
 END $$;
-
 
 -- Criando tabela ano_mes_cadastro para relacionamento com mae_coruja 
 

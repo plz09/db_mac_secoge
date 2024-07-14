@@ -40,11 +40,6 @@ DROP TABLE producao.dport157
 ;
 
 
--- Dropando colunas desnecessárias em fproducao2024
-
-ALTER TABLE producao.fproducao2024
-DROP COLUMN geometry
-;
 -- Rel fproducao2024 com dcbo
 
 ALTER TABLE producao.fproducao2024
