@@ -54,7 +54,8 @@ def main():
             'rel_ouvidoria.sql',
             'rel_atende_gestante.sql',
             'rel_atbasica.sql',
-            'rel_producao.sql'
+            'rel_producao.sql',
+            'rel_obras.sql'
         ],
         'scripts_sql/views_sql': [
             'views_mae_coruja.sql'
