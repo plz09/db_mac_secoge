@@ -35,3 +35,18 @@ ALTER TABLE ds_unidades.unidades_mac
 ADD CONSTRAINT fk_id_distritos FOREIGN KEY (fk_id_distritos) REFERENCES ds_unidades.distritos(id_distritos)
 ;
   
+-- relacionamento de login_unidades com unidades_mac
+
+ALTER TABLE ds_unidades.id_unidades_mac
+ADD COLUMN fk_id_login_senha INTEGER
+;
+
+UPDATE ds_unidades.unidades_mac tab_mac
+SET fk_id_login_senha = id_login_unidades
+FROM ds_unidades.login_unidades tab_log_uni
+WHERE tab_mac.codigo_unidade = tab_log_uni.no_da_us
+;
+
+ALTER TABLE ds_unidades.unidades_mac 
+ADD CONSTRAINT fk_id_login_senha FOREIGN KEY (fk_id_login_senha) REFERENCES ds_unidades.login_unidades(id_login_unidades)
+;
