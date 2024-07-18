@@ -13,7 +13,8 @@ def process_spa_files(engine):
         'SPA - Isolamento Pediatria',
         'SPA - Classificação Pediatria',
         'SPA - Classificação',
-        'SPA - Odontologia'
+        'SPA - Odontologia',
+        'SPA - Isolamento'
     ]
     
     for aba in abas_spa:
