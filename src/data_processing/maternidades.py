@@ -2,7 +2,7 @@ from ..database import write_df_to_sql
 from ..utils.excel_operations import remove_espacos_e_acentos
 
 def process_maternidades_files(engine):
-    path_matriz_GAH = 'data_bruto/SAP/MatrizGAH_GGAI_SECOGE.xlsx'
+    path_matriz_GAH = 'data_bruto/mat_spa/MatrizGAH_GGAI_SECOGE.xlsx'
     schema = 'maternidades'
 
     abas_maternidades = [

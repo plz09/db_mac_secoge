@@ -50,3 +50,7 @@ WHERE tab_mac.cnes_padrao = tab_log_uni.cnes
 ALTER TABLE ds_unidades.unidades_mac 
 ADD CONSTRAINT fk_id_login_senha FOREIGN KEY (fk_id_login_senha) REFERENCES ds_unidades.login_unidades(id_login_unidades)
 ;
+
+
+
+

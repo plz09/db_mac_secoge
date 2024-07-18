@@ -3,10 +3,10 @@ from ..utils.excel_operations import remove_espacos_e_acentos
 
 def process_mae_coruja_data(engine):
     # Leitura dos dados
-    path_mae_coruja_mulher = 'data_bruto/Mae_Coruja/DADOS MULHER.xlsx'
-    path_mae_coruja_crianca = 'data_bruto/Mae_Coruja/DADOS CRIANÇA.xlsx'
-    path_mae_coruja_kits = 'data_bruto/Mae_Coruja/consolidado_kits_pmcr.xlsx'
-    path_mae_coruja_atividades = 'data_bruto/Mae_Coruja/consolidado_atividades_coletivas_pmcr.xlsx'
+    path_mae_coruja_mulher = 'data_bruto/mae_coruja/DADOS MULHER.xlsx'
+    path_mae_coruja_crianca = 'data_bruto/mae_coruja/DADOS CRIANÇA.xlsx'
+    path_mae_coruja_kits = 'data_bruto/mae_coruja/consolidado_kits_pmcr.xlsx'
+    path_mae_coruja_atividades = 'data_bruto/mae_coruja/consolidado_atividades_coletivas_pmcr.xlsx'
     aba_atividades = 'atv_cltv_2018_2023'
     aba_2024_mae_coruja_kits = '2024'
 
@@ -29,7 +29,7 @@ def process_mae_coruja_data(engine):
         write_df_to_sql(df, table_name, engine, schema)
 
     # Processamento adicional dos arquivos específicos
-    path_mae_coruja_espacos = 'data_bruto/Mae_Coruja/Listagem_Espacos_PMCR_endereco_bairros_cobertos.xlsx'
+    path_mae_coruja_espacos = 'data_bruto/mae_coruja/Listagem_Espacos_PMCR_endereco_bairros_cobertos.xlsx'
     abas_mae_coruja_espacos = [
         'ESPACOS',
         'Espaços_Unidades',

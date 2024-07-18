@@ -41,16 +41,14 @@ BEGIN
             EXTRACT(DOW FROM dia),
             TO_CHAR(dia, 'Mon'),
             CASE
-                WHEN EXTRACT(MONTH FROM dia) IN (1, 2, 3) THEN 1
-                WHEN EXTRACT(MONTH FROM dia) IN (4, 5, 6) THEN 2
-                WHEN EXTRACT(MONTH FROM dia) IN (7, 8, 9) THEN 3
-                WHEN EXTRACT(MONTH FROM dia) IN (10, 11, 12) THEN 4
+                WHEN EXTRACT(MONTH FROM dia) IN (1, 2, 3, 4) THEN 1
+                WHEN EXTRACT(MONTH FROM dia) IN (5, 6, 7, 8) THEN 2
+                WHEN EXTRACT(MONTH FROM dia) IN (9, 10, 11, 12) THEN 3
             END,
-            TO_CHAR(dia, 'YYYY') || '-Q' || CASE
-                WHEN EXTRACT(MONTH FROM dia) IN (1, 2, 3) THEN '1'
-                WHEN EXTRACT(MONTH FROM dia) IN (4, 5, 6) THEN '2'
-                WHEN EXTRACT(MONTH FROM dia) IN (7, 8, 9) THEN '3'
-                WHEN EXTRACT(MONTH FROM dia) IN (10, 11, 12) THEN '4'
+            TO_CHAR(dia, 'YYYY') || '.' || CASE
+                WHEN EXTRACT(MONTH FROM dia) IN (1, 2, 3, 4) THEN '1'
+                WHEN EXTRACT(MONTH FROM dia) IN (5, 6, 7, 8) THEN '2'
+                WHEN EXTRACT(MONTH FROM dia) IN (9, 10, 11, 12) THEN '3'
             END,
             TO_CHAR(dia, 'FMMonth YYYY'),
             TO_CHAR(dia, 'YYYYMM')
