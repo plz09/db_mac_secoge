@@ -10,7 +10,7 @@ CREATE TABLE calendario.calendario (
     quadrimestre INTEGER,
     ano_quadrimestre VARCHAR(7),
     mes_completo VARCHAR(20),
-    mvm VARCHAR(6)
+    mvm INTEGER
 );
 
 DO $$ 
@@ -97,7 +97,7 @@ BEGIN
                 WHEN EXTRACT(MONTH FROM dia) IN (9, 10, 11, 12) THEN '3'
             END,
             mes_completo_pt,
-            TO_CHAR(dia, 'YYYYMM')
+            CAST(TO_CHAR(dia, 'YYYYMM') AS INTEGER)
         );
     END LOOP;
 END $$;
