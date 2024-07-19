@@ -18,7 +18,8 @@ ADD CONSTRAINT fk_id_unidades_mac FOREIGN KEY (fk_id_unidades_mac) REFERENCES ds
 -- Convertendo tipo de colunas da tabela consulta_prenatal
 ALTER TABLE atbasica.consulta_prenatal
 ALTER COLUMN nu_cns TYPE BIGINT USING CAST(nu_cns AS BIGINT),
-ALTER COLUMN nu_cpf_cidadao TYPE BIGINT USING CAST(nu_cpf_cidadao AS BIGINT)
+ALTER COLUMN nu_cpf_cidadao TYPE BIGINT USING CAST(nu_cpf_cidadao AS BIGINT),
+ALTER COLUMN dt_nascimento TYPE DATE USING CAST(dt_nascimento AS DATE)
 ;
 
 -- Dropando colunas desnecessárias
