@@ -1,3 +1,50 @@
+-- Removendo duplicatas da tabela consulta_prental
+
+ALTER TABLE atbasica.consulta_prenatal ADD COLUMN is_duplicate BOOLEAN DEFAULT FALSE;
+
+WITH cte_duplicates AS (
+    SELECT
+        *,
+        ROW_NUMBER() OVER (PARTITION BY co_dim_tempo, COALESCE(nu_cpf_cidadao, nu_cns) ORDER BY co_dim_tempo) AS row_num
+    FROM
+        atbasica.consulta_prenatal
+)
+UPDATE
+    atbasica.consulta_prenatal
+SET
+    is_duplicate = TRUE
+FROM
+    cte_duplicates
+WHERE
+    atbasica.consulta_prenatal.id_consulta_prenatal = cte_duplicates.id_consulta_prenatal
+    AND cte_duplicates.row_num > 1
+;
+
+
+DELETE FROM atbasica.consulta_prenatal
+WHERE is_duplicate = TRUE
+;
+
+ALTER TABLE atbasica.consulta_prenatal
+DROP COLUMN is_duplicate
+;
+
+--Criando coluna dpp_calido na tabela consulta_prenatal
+
+ALTER TABLE atbasica.consulta_prenatal ADD COLUMN dpp_valido BOOLEAN;
+
+UPDATE atbasica.consulta_prenatal
+SET dpp_valido = (
+    CASE
+        WHEN dpp <> '1900-10-06' AND
+             (nu_cpf_cidadao IS NOT NULL OR nu_cns IS NOT NULL) AND
+             no_cidadao IS NOT NULL
+        THEN TRUE
+        ELSE FALSE
+    END
+);
+
+
 -- Relacionamento de Atenção básica com unidades_mac
 
 -- Tabela consulta_prenatal
