@@ -1,33 +1,77 @@
--- Removendo duplicatas da tabela consulta_prental
 
-ALTER TABLE atbasica.consulta_prenatal ADD COLUMN is_duplicate BOOLEAN DEFAULT FALSE;
+-- Convertendo tipo de dado das colunas de data para date
 
-WITH cte_duplicates AS (
-    SELECT
-        *,
-        ROW_NUMBER() OVER (PARTITION BY co_dim_tempo, COALESCE(nu_cpf_cidadao, nu_cns) ORDER BY co_dim_tempo) AS row_num
-    FROM
-        atbasica.consulta_prenatal
-)
-UPDATE
-    atbasica.consulta_prenatal
-SET
-    is_duplicate = TRUE
-FROM
-    cte_duplicates
-WHERE
-    atbasica.consulta_prenatal.id_consulta_prenatal = cte_duplicates.id_consulta_prenatal
-    AND cte_duplicates.row_num > 1
-;
-
-
-DELETE FROM atbasica.consulta_prenatal
-WHERE is_duplicate = TRUE
+ALTER TABLE atbasica.consulta_prenatal
+ALTER COLUMN co_dim_tempo TYPE DATE USING CAST(co_dim_tempo AS DATE)
 ;
 
 ALTER TABLE atbasica.consulta_prenatal
-DROP COLUMN is_duplicate
+ALTER COLUMN dpp TYPE DATE USING CAST(dpp AS DATE)
 ;
+
+
+-- deletar duplicatas da tabela consulta_prenatal
+WITH consultas_com_identificador AS (
+    SELECT 
+        ctid,
+        COALESCE(CAST(nu_cpf_cidadao AS TEXT), CAST(nu_cns AS TEXT)) AS gestante_id,
+        nu_cpf_cidadao,
+        nu_cns,
+        co_dim_tempo
+    FROM 
+        atbasica.consulta_prenatal
+),
+duplicatas AS (
+    SELECT 
+        ctid,
+        ROW_NUMBER() OVER (
+            PARTITION BY gestante_id, co_dim_tempo 
+            ORDER BY ctid
+        ) AS rn
+    FROM 
+        consultas_com_identificador
+)
+DELETE FROM atbasica.consulta_prenatal
+WHERE ctid IN (
+    SELECT ctid
+    FROM duplicatas
+    WHERE rn > 1
+);
+
+-- criando coluna id_gestante
+ALTER TABLE atbasica.consulta_prenatal
+ADD COLUMN gestante_id BIGINT
+;
+
+UPDATE atbasica.consulta_prenatal
+SET gestante_id = COALESCE(nu_cpf_cidadao::BIGINT, nu_cns::BIGINT)
+;
+
+-- relatorio com total geral de consultas e por gestante
+SELECT 
+    gestante_id,
+    COUNT(*) AS numero_de_consultas
+FROM 
+    atbasica.consulta_prenatal
+GROUP BY 
+    CUBE(gestante_id)
+ORDER BY 
+    numero_de_consultas DESC
+;
+
+-- relatorio com total de consultas por gestante por co_dim_tempo
+SELECT 
+    gestante_id,
+    COUNT(*) AS numero_de_consultas,
+	co_dim_tempo
+FROM 
+    atbasica.consulta_prenatal
+GROUP BY 
+    gestante_id, co_dim_tempo
+ORDER BY 
+    numero_de_consultas DESC
+;
+
 
 --Criando coluna dpp_calido na tabela consulta_prenatal
 
