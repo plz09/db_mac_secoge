@@ -217,3 +217,27 @@ DROP COLUMN cnes,
 DROP COLUMN	nome_fantasia,
 DROP COLUMN	nome_equipe
 ;
+
+
+-- analises 
+/*
+select count(*) from atbasica.consulta_prenatal where co_dim_tempo_dum IS NULL
+
+select count(*) from atbasica.consulta_prenatal where dpp_valido = true
+
+
+
+-- quantidade de total de consultas por gestantes
+
+SELECT 
+    gestante_id,
+    COUNT(*) AS numero_de_consultas
+FROM 
+    atbasica.consulta_prenatal
+GROUP BY 
+    gestante_id
+ORDER BY 
+    numero_de_consultas DESC
+;
+
+*/
