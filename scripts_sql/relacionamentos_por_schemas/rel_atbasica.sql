@@ -38,6 +38,20 @@ WHERE ctid IN (
     WHERE rn > 1
 );
 
+
+-- Adicionar as colunas co_dim_tempo_mes e co_dim_tempo_ano
+ALTER TABLE atbasica.consulta_prenatal
+ADD COLUMN co_dim_tempo_mes INTEGER,
+ADD COLUMN co_dim_tempo_ano INTEGER
+;
+
+UPDATE atbasica.consulta_prenatal
+SET 
+    co_dim_tempo_mes = EXTRACT(MONTH FROM co_dim_tempo),
+    co_dim_tempo_ano = EXTRACT(YEAR FROM co_dim_tempo)
+;
+
+
 -- criando coluna id_gestante
 ALTER TABLE atbasica.consulta_prenatal
 ADD COLUMN gestante_id BIGINT
@@ -194,3 +208,19 @@ DROP COLUMN	nome_equipe
 ;
 
 
+-- rel consulta_prenatal com calendario
+
+ALTER TABLE atbasica.consulta_prenatal
+ADD COLUMN fk_id_calendario_atbasica_prenatal INTEGER
+;
+
+UPDATE atbasica.consulta_prenatal prenatal
+SET fk_id_calendario_atbasica_prenatal = calend.id_calendario 
+FROM calendario.calendario calend
+WHERE prenatal.co_dim_tempo = calend.data_dma
+;
+
+
+ALTER TABLE atbasica.consulta_prenatal
+ADD CONSTRAINT fk_id_calendario_atbasica_prenatal FOREIGN KEY (fk_id_calendario_atbasica_prenatal) REFERENCES calendario.calendario(id_calendario)
+;

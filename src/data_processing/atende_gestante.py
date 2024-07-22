@@ -2,7 +2,7 @@ import pandas as pd
 from ..utils.excel_operations import remove_espacos_e_acentos
 
 def read_atende_gestante_data():
-    path_atende_gestante_registro_teleatendimentos = 'data_bruto/Atende_Gestante/Atende Gestante - Registro de Atendimentos.xlsx'
+    path_atende_gestante_registro_teleatendimentos = 'data_bruto/atende_gestante/Atende Gestante - Registro de Atendimentos.xlsx'
     aba_registro_teleatendimento = 'Registro de teleatendimento'
     path_avaliacao_diaria = 'data_bruto/atende_gestante/avaliacao_diaria.xlsx'
     

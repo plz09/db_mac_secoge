@@ -58,7 +58,8 @@ def main():
             'rel_obras.sql'
         ],
         'scripts_sql/views_sql': [
-            'views_mae_coruja.sql'
+            'views_mae_coruja.sql',
+            'views_atencao_basica.sql'
         ]
     }
 
