@@ -77,3 +77,19 @@ ALTER TABLE atende_gestante.registros_teleatendimentos
 ALTER COLUMN carimbo_de_datahora TYPE DATE USING CAST(carimbo_de_datahora AS DATE)
 ;
 
+
+-- RELACIONAMENTO DE REGISTROS_TELEATENDIMENTOS COM CALENDARIO
+
+ALTER TABLE atende_gestante.registros_teleatendimentos
+ADD COLUMN fk_id_calendario_registros_teleatendimentos INTEGER
+;
+
+UPDATE atende_gestante.registros_teleatendimentos tele 
+SET fk_id_calendario_registros_teleatendimentos = id_calendario 
+FROM calendario.calendario calend 
+WHERE tele.carimbo_de_datahora = calend.data_dma
+;
+
+ALTER TABLE atende_gestante.registros_teleatendimentos
+ADD CONSTRAINT fk_id_calendario_registros_teleatendimentos FOREIGN KEY (fk_id_calendario_registros_teleatendimentos) REFERENCES calendario.calendario(id_calendario)
+;
