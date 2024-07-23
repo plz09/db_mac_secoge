@@ -62,5 +62,18 @@ ADD CONSTRAINT fk_id_login_senha FOREIGN KEY (fk_id_login_senha) REFERENCES ds_u
 ;
 
 
+-- relacionamento de login_ds com unidades_mac
 
+ALTER TABLE ds_unidades.unidades_mac
+ADD COLUMN fk_id_login_ds INTEGER
+;
 
+UPDATE ds_unidades.unidades_mac tab_mac
+SET fk_id_login_ds = id_login_ds
+FROM ds_unidades.login_ds tab_log_ds
+WHERE tab_mac.ds_romano = tab_log_ds.ds_romano
+;
+
+ALTER TABLE ds_unidades.unidades_mac 
+ADD CONSTRAINT fk_id_login_ds FOREIGN KEY (fk_id_login_ds) REFERENCES ds_unidades.login_unidades(id_login_unidades)
+;
