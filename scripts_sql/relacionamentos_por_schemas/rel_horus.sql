@@ -125,3 +125,19 @@ WHERE his.data_saida = calend.data_dma
 ALTER TABLE horus.historico_pacientes
 ADD CONSTRAINT fk_id_calendario_historico_pacientes FOREIGN KEY (fk_id_calendario_historico_pacientes) REFERENCES calendario.calendario(id_calendario)
 ;
+
+-- REL DISPENSA_MEDICAMENTOS COM CALENDARIO
+
+ALTER TABLE horus.dispensa_medicamentos
+ADD COLUMN fk_id_calendario_dispensa_medicamentos INTEGER
+;
+
+UPDATE horus.dispensa_medicamentos dismed 
+SET fk_id_calendario_dispensa_medicamentos = id_calendario 
+FROM calendario.calendario calend 
+WHERE dismed.data = calend.data_dma
+;
+
+ALTER TABLE horus.dispensa_medicamentos
+ADD CONSTRAINT fk_id_calendario_dispensa_medicamentos FOREIGN KEY (fk_id_calendario_dispensa_medicamentos) REFERENCES calendario.calendario(id_calendario)
+;
