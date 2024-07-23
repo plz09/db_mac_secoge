@@ -251,3 +251,27 @@ WHERE atividades.data_inicio = calend.data_dma
 ALTER TABLE mae_coruja.atividades
 ADD CONSTRAINT fk_id_calendario_atividades FOREIGN KEY (fk_id_calendario_atividades) REFERENCES calendario.calendario(id_calendario)
 ;
+
+-- RELACIONAMENTO DE MAE_CORUJA KITS COM CALENDARIO
+
+-- ALTERANDO TIPO DA COLUNA DATA_DE_ENVIO PARA DATE
+
+ALTER TABLE mae_coruja.kits
+ALTER COLUMN data_de_envio TYPE DATE USING CAST(data_de_envio AS DATE)
+;
+
+
+ALTER TABLE mae_coruja.kits
+ADD COLUMN fk_id_calendario_kits INTEGER
+;
+
+UPDATE mae_coruja.kits kits 
+SET fk_id_calendario_kits = calend.id_calendario 
+FROM calendario.calendario calend
+WHERE kits.data_de_envio = calend.data_dma
+;
+
+
+ALTER TABLE mae_coruja.kits
+ADD CONSTRAINT fk_id_calendario_kits FOREIGN KEY (fk_id_calendario_kits) REFERENCES calendario.calendario(id_calendario)
+;

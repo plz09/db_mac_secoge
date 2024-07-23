@@ -1,4 +1,4 @@
-CREATE VIEW mae_coruja.mae_coruja_envios_por_mes AS
+CREATE VIEW mae_coruja.vw_mae_coruja_envios_por_mes AS
 WITH mes_mapping AS (
     SELECT 1 AS mes, 'Janeiro' AS mes_nome
     UNION ALL SELECT 2, 'Fevereiro'
@@ -14,15 +14,18 @@ WITH mes_mapping AS (
     UNION ALL SELECT 12, 'Dezembro'
 )
 SELECT k.mes_envio AS mes,
+       k.data_de_envio, 
        m.mes_nome,
        k.espaco_mae_coruja,
        k.quantidade_envios
 FROM (
     SELECT mes_envio,
+           data_de_envio, 
            espaco_mae_coruja,
            count(*) AS quantidade_envios
     FROM mae_coruja.kits
-    GROUP BY mes_envio, espaco_mae_coruja
+    GROUP BY mes_envio, espaco_mae_coruja, data_de_envio
 ) k
 JOIN mes_mapping m ON k.mes_envio = m.mes
-ORDER BY k.mes_envio;
+ORDER BY k.mes_envio
+;
