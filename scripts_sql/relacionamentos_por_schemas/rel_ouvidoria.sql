@@ -74,3 +74,19 @@ ALTER COLUMN data_de_conclusao_prevista TYPE DATE USING CAST(data_de_conclusao_p
 ALTER COLUMN data_primeiro_destino_encaminhamento TYPE DATE USING CAST(data_primeiro_destino_encaminhamento AS DATE),
 ALTER COLUMN data_do_acomp_atual TYPE DATE USING CAST(data_do_acomp_atual AS DATE)
 ;
+
+-- REL OUVIDORIA COM CALENDARIO
+
+ALTER TABLE ouvidoria.ouvidoria
+ADD COLUMN fk_id_calendario_ouvidoria INTEGER
+;
+
+UPDATE ouvidoria.ouvidoria ouvi
+SET fk_id_calendario_ouvidoria = id_calendario 
+FROM calendario.calendario calend 
+WHERE ouvi.data_da_demanda = calend.data_dma 
+;
+
+ALTER TABLE ouvidoria.ouvidoria 
+ADD CONSTRAINT fk_id_calendario_ouvidoria FOREIGN KEY (fk_id_calendario_ouvidoria) REFERENCES calendario.calendario(id_calendario)
+;

@@ -74,6 +74,8 @@ ALTER COLUMN doulas TYPE INTEGER USING CAST(doulas AS INTEGER)
 -- Tratando tabela registros_teleatendimentos
 
 -- Remove valores inválidos (que não são datas válidas)
+
+/*
 DELETE FROM atende_gestante.registros_teleatendimentos
 WHERE NOT (carimbo_de_datahora ~ '^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$')
 OR carimbo_de_datahora IS NULL
@@ -84,5 +86,5 @@ ALTER TABLE atende_gestante.registros_teleatendimentos
 ALTER COLUMN carimbo_de_datahora TYPE TIMESTAMP USING CAST(carimbo_de_datahora AS TIMESTAMP)
 ;
 
-
+*/
 
