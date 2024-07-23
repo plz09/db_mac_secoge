@@ -11,33 +11,13 @@ ALTER COLUMN dpp TYPE DATE USING CAST(dpp AS DATE)
 
 
 -- deletar duplicatas da tabela consulta_prenatal
-WITH consultas_com_identificador AS (
-    SELECT 
-        ctid,
-        COALESCE(CAST(nu_cpf_cidadao AS TEXT), CAST(nu_cns AS TEXT)) AS gestante_id,
-        nu_cpf_cidadao,
-        nu_cns,
-        co_dim_tempo
-    FROM 
-        atbasica.consulta_prenatal
-),
-duplicatas AS (
-    SELECT 
-        ctid,
-        ROW_NUMBER() OVER (
-            PARTITION BY gestante_id, co_dim_tempo 
-            ORDER BY ctid
-        ) AS rn
-    FROM 
-        consultas_com_identificador
-)
-DELETE FROM atbasica.consulta_prenatal
-WHERE ctid IN (
-    SELECT ctid
-    FROM duplicatas
-    WHERE rn > 1
-);
-
+DELETE FROM atbasica.consulta_prenatal a
+USING atbasica.consulta_prenatal b
+WHERE
+    a.ctid < b.ctid AND
+    COALESCE(CAST(a.nu_cpf_cidadao AS TEXT), CAST(a.nu_cns AS TEXT)) = COALESCE(CAST(b.nu_cpf_cidadao AS TEXT), CAST(b.nu_cns AS TEXT)) AND
+    a.co_dim_tempo::DATE = b.co_dim_tempo::DATE
+;
 
 -- Adicionar as colunas co_dim_tempo_mes e co_dim_tempo_ano
 ALTER TABLE atbasica.consulta_prenatal
