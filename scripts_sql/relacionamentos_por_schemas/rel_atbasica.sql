@@ -224,3 +224,51 @@ WHERE prenatal.co_dim_tempo = calend.data_dma
 ALTER TABLE atbasica.consulta_prenatal
 ADD CONSTRAINT fk_id_calendario_atbasica_prenatal FOREIGN KEY (fk_id_calendario_atbasica_prenatal) REFERENCES calendario.calendario(id_calendario)
 ;
+
+-- REL PUERICULTURA COM CALENDARIO
+
+ALTER TABLE atbasica.consulta_puericultura
+ADD COLUMN fk_id_calendario_atbasica_puericultura INTEGER
+;
+
+UPDATE atbasica.consulta_puericultura puericult
+SET fk_id_calendario_atbasica_puericultura = calend.id_calendario
+FROM calendario.calendario calend
+WHERE puericult.co_dim_tempo = calend.data_dma
+;
+
+ALTER TABLE atbasica.consulta_puericultura 
+ADD CONSTRAINT fk_id_calendario_atbasica_puericultura FOREIGN KEY (fk_id_calendario_atbasica_puericultura) REFERENCES calendario.calendario(id_calendario)
+;
+
+-- REL PUERPERAL COM CALENDARIO
+
+ALTER TABLE atbasica.consulta_puerperal
+ADD COLUMN fk_id_calendario_atbasica_puerperal INTEGER
+;
+
+UPDATE atbasica.consulta_puerperal puerp
+SET fk_id_calendario_atbasica_puerperal = calend.id_calendario
+FROM calendario.calendario calend
+WHERE puerp.co_dim_tempo = calend.data_dma
+;
+
+ALTER TABLE atbasica.consulta_puerperal
+ADD CONSTRAINT fk_id_calendario_atbasica_puerperal FOREIGN KEY (fk_id_calendario_atbasica_puerperal) REFERENCES calendario.calendario(id_calendario)
+;
+
+-- REL PUERPERAL COM CALENDARIO
+
+ALTER TABLE atbasica.quantitativo_gestantes_acompanhadas
+ADD COLUMN fk_id_calendario_atbasica_quantitativo_gest_acomp INTEGER
+;
+
+UPDATE atbasica.quantitativo_gestantes_acompanhadas qtt_gest
+SET fk_id_calendario_atbasica_quantitativo_gest_acomp = calend.id_calendario 
+FROM calendario.calendario calend
+WHERE qtt_gest.mes = calend.data_dma
+;
+
+ALTER TABLE atbasica.quantitativo_gestantes_acompanhadas
+ADD CONSTRAINT fk_id_calendario_atbasica_quantitativo_gest_acomp FOREIGN KEY (fk_id_calendario_atbasica_quantitativo_gest_acomp) REFERENCES calendario.calendario(id_calendario)
+;
