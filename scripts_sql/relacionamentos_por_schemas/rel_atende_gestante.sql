@@ -93,3 +93,36 @@ WHERE tele.carimbo_de_datahora = calend.data_dma
 ALTER TABLE atende_gestante.registros_teleatendimentos
 ADD CONSTRAINT fk_id_calendario_registros_teleatendimentos FOREIGN KEY (fk_id_calendario_registros_teleatendimentos) REFERENCES calendario.calendario(id_calendario)
 ;
+
+-- RELACIONAMENTO DE CONECTAZAP COM CALENDARIO
+
+ALTER TABLE atende_gestante.conectazap
+ADD COLUMN fk_id_calendario_conectazap INTEGER
+;
+
+UPDATE atende_gestante.conectazap zap 
+SET fk_id_calendario_conectazap = id_calendario 
+FROM calendario.calendario calend 
+WHERE zap.data = calend.data_dma
+;
+
+ALTER TABLE atende_gestante.conectazap
+ADD CONSTRAINT fk_id_calendario_conectazap FOREIGN KEY (fk_id_calendario_conectazap) REFERENCES calendario.calendario(id_calendario)
+;
+
+-- RELACIONAMENTO DE AVALIACAO_DIARIA COM CALENDARIO
+
+ALTER TABLE atende_gestante.avaliacao_diaria
+ADD COLUMN fk_id_calendario_avaliacao_diaria INTEGER
+;
+
+UPDATE atende_gestante.avaliacao_diaria aval 
+SET fk_id_calendario_avaliacao_diaria = id_calendario 
+FROM calendario.calendario calend 
+WHERE aval.data = calend.data_dma
+;
+
+ALTER TABLE atende_gestante.avaliacao_diaria
+ADD CONSTRAINT fk_id_calendario_avaliacao_diaria FOREIGN KEY (fk_id_calendario_avaliacao_diaria) REFERENCES calendario.calendario(id_calendario)
+;
+
