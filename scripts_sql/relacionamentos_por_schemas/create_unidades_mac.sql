@@ -18,6 +18,16 @@ FROM
     ds_unidades.unidades
 ;
 
+ALTER TABLE ds_unidades.unidades_mac
+ADD COLUMN ds_romano VARCHAR
+;
+
+UPDATE ds_unidades.unidades_mac tab_mac
+SET ds_romano = tab_ds.ds_romano
+FROM ds_unidades.distritos tab_ds
+WHERE tab_mac.distrito = tab_ds.ds
+;
+
 
 -- Define relacionamento entre unidades_mac e ditritos inserindo FK em unidades_mac
 
