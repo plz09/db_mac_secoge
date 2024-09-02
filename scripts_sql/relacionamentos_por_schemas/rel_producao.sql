@@ -153,3 +153,21 @@ WHERE dcbo.cbo = dextrat.profissional_cbo
 ALTER TABLE producao.dextrato_profissionais_sus
 ADD CONSTRAINT fk_id_dcbo FOREIGN KEY (fk_id_dcbo) REFERENCES producao.dcbo(id_dcbo)
 ;
+
+
+-- Rel fproducao com calendario
+
+ALTER TABLE producao.fproducao2024
+ADD COLUMN fk_id_calendario_fproducao INTEGER
+;
+
+UPDATE producao.fproducao2024 fprod
+SET fk_id_calendario_fproducao = calend.id_calendario 
+FROM calendario.calendario calend
+WHERE 
+    EXTRACT(YEAR FROM calend.data_dma) * 100 + EXTRACT(MONTH FROM calend.data_dma) = fprod.pa_cmp;
+;
+
+ALTER TABLE producao.fproducao2024
+ADD CONSTRAINT fk_id_calendario_fproducao FOREIGN KEY (fk_id_calendario_fproducao) REFERENCES calendario.calendario(id_calendario)
+;
