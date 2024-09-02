@@ -32,7 +32,7 @@ ADD CONSTRAINT fk_id_unidades_mac FOREIGN KEY (fk_id_unidades_mac) REFERENCES ds
 
 ALTER TABLE maternidades.mat_classificacao ADD COLUMN data_new DATE;
 UPDATE maternidades.mat_classificacao
-SET data_new = TO_DATE('1899-12-30', 'YYYY-MM-DD') + (data::integer)
+SET data_new = DATE(data);
 ;
 
 ALTER TABLE maternidades.mat_classificacao DROP COLUMN data
@@ -195,7 +195,7 @@ ADD CONSTRAINT fk_id_unidades_mac FOREIGN KEY (fk_id_unidades_mac) REFERENCES ds
 
 ALTER TABLE maternidades.mat_procedi_atend ADD COLUMN data_new DATE;
 UPDATE maternidades.mat_procedi_atend
-SET data_new = TO_DATE('1899-12-30', 'YYYY-MM-DD') + (data::integer)
+SET data_new = DATE(data);
 ;
 
 ALTER TABLE maternidades.mat_procedi_atend DROP COLUMN data
@@ -274,7 +274,7 @@ ADD CONSTRAINT fk_id_unidades_mac FOREIGN KEY (fk_id_unidades_mac) REFERENCES ds
 
 ALTER TABLE maternidades.mat_triagem ADD COLUMN data_new DATE;
 UPDATE maternidades.mat_triagem
-SET data_new = TO_DATE('1899-12-30', 'YYYY-MM-DD') + (data::integer)
+SET data_new = DATE(data);
 ;
 
 ALTER TABLE maternidades.mat_triagem DROP COLUMN data
@@ -299,8 +299,8 @@ ADD CONSTRAINT fk_id_calendario_mat_triagem FOREIGN KEY (fk_id_calendario_mat_tr
 
 -- Dropando colunas de municipiosdeorigem
 
-ALTER TABLE maternidades.municipiosdeorigem
-DROP COLUMN maternidade;
+--ALTER TABLE maternidades.municipiosdeorigem
+--DROP COLUMN maternidade;
 
 -- Convertendo tipos de colunas de mat_triagem
 
@@ -355,7 +355,7 @@ ADD CONSTRAINT fk_id_unidades_mac FOREIGN KEY (fk_id_unidades_mac) REFERENCES ds
 
 ALTER TABLE maternidades.municipiosdeorigem ADD COLUMN data_new DATE;
 UPDATE maternidades.municipiosdeorigem
-SET data_new = TO_DATE('1899-12-30', 'YYYY-MM-DD') + (data::integer)
+SET data_new = Date(data)
 ;
 
 ALTER TABLE maternidades.municipiosdeorigem DROP COLUMN data

@@ -237,7 +237,7 @@ ADD CONSTRAINT fk_id_unidades_mac FOREIGN KEY (fk_id_unidades_mac) REFERENCES ds
 
 ALTER TABLE spa.spa_cirurgia ADD COLUMN data_new DATE;
 UPDATE spa.spa_cirurgia
-SET data_new = TO_DATE('1899-12-30', 'YYYY-MM-DD') + (data::integer)
+SET data_new = DATE(data);
 ;
 
 ALTER TABLE spa.spa_cirurgia DROP COLUMN data
@@ -246,43 +246,43 @@ ALTER TABLE spa.spa_cirurgia DROP COLUMN data
 -- spa_classificacao
 ALTER TABLE spa.spa_classificacao ADD COLUMN data_new DATE;
 UPDATE spa.spa_classificacao
-SET data_new = TO_DATE('1899-12-30', 'YYYY-MM-DD') + (data::integer);
+SET data_new = DATE(data);
 ALTER TABLE spa.spa_classificacao DROP COLUMN data;
 
 -- spa_classificacaopediatria
 ALTER TABLE spa.spa_classificacaopediatria ADD COLUMN data_new DATE;
 UPDATE spa.spa_classificacaopediatria
-SET data_new = TO_DATE('1899-12-30', 'YYYY-MM-DD') + (data::integer);
+SET data_new = DATE(data);
 ALTER TABLE spa.spa_classificacaopediatria DROP COLUMN data;
 
 -- spa_clinico
 ALTER TABLE spa.spa_clinico ADD COLUMN data_new DATE;
 UPDATE spa.spa_clinico
-SET data_new = TO_DATE('1899-12-30', 'YYYY-MM-DD') + (data::integer);
+SET data_new = DATE(data);
 ALTER TABLE spa.spa_clinico DROP COLUMN data;
 
 -- spa_isolamentopediatria
 ALTER TABLE spa.spa_isolamentopediatria ADD COLUMN data_new DATE;
 UPDATE spa.spa_isolamentopediatria
-SET data_new = TO_DATE('1899-12-30', 'YYYY-MM-DD') + (data::integer);
+SET data_new = DATE(data);
 ALTER TABLE spa.spa_isolamentopediatria DROP COLUMN data;
 
 -- spa_odontologia
 ALTER TABLE spa.spa_odontologia ADD COLUMN data_new DATE;
 UPDATE spa.spa_odontologia
-SET data_new = TO_DATE('1899-12-30', 'YYYY-MM-DD') + (data::integer);
+SET data_new = DATE(data);
 ALTER TABLE spa.spa_odontologia DROP COLUMN data;
 
 -- spa_ortopedia
 ALTER TABLE spa.spa_ortopedia ADD COLUMN data_new DATE;
 UPDATE spa.spa_ortopedia
-SET data_new = TO_DATE('1899-12-30', 'YYYY-MM-DD') + (data::integer);
+SET data_new = DATE(data);
 ALTER TABLE spa.spa_ortopedia DROP COLUMN data;
 
 -- spa_pediatria
 ALTER TABLE spa.spa_pediatria ADD COLUMN data_new DATE;
 UPDATE spa.spa_pediatria
-SET data_new = TO_DATE('1899-12-30', 'YYYY-MM-DD') + (data::integer);
+SET data_new = DATE(data);
 ALTER TABLE spa.spa_pediatria DROP COLUMN data;
 
 
