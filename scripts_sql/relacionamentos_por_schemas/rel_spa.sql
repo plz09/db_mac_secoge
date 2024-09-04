@@ -207,10 +207,12 @@ ALTER TABLE spa.spa_pediatria
 ADD COLUMN fk_id_unidades_mac INTEGER
 ;
 
+
 UPDATE spa.spa_pediatria
 SET unidade = 'US 164 CENTRO DE REIDRATACAO E URG PED M CRAVO GAMA'
 WHERE unidade LIKE '%Cravo Grama%'
 ;
+
 
 UPDATE spa.spa_pediatria spapediat  
 SET fk_id_unidades_mac = (
