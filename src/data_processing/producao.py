@@ -21,11 +21,15 @@ def read_producao_data():
     df_fproducao_2406 = remove_espacos_e_acentos(path_fproducao_2406, colunas=cols_fproducao, dtype={'PA_CBOCOD': str})
     df_fproducao = pd.concat([df_fproducao_2405, df_fproducao_2406], ignore_index=True)
 
+    df_producao_agg = df_fproducao.groupby(
+                                ['pa_coduni', 'pa_cmp', 'pa_proc_id', 'pa_cnsmed', 'pa_cbocod'], as_index=False
+                                )['pa_qtdapr'].sum()
+
     return {
         'dformaorganiz': df_dFormaOrganiz,
         'fprofissionais': df_fProfissionais,
         'dcbo': df_dCBO,
         'dport157': df_dPort157,
-        'fproducao2024': df_fproducao,
+        'fproducao2024': df_producao_agg,
         'dextrato_profissionais_sus': df_dextrato_profissionais_sus
     }
