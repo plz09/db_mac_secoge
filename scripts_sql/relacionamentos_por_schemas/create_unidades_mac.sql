@@ -17,7 +17,7 @@ SELECT
     no_da_us::INTEGER,
     ds, 
     nome_fantasia, 
-    tipo_equipamento
+    tipo_servi
 FROM 
     ds_unidades.unidades
 ;
