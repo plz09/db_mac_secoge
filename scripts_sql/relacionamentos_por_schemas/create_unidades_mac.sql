@@ -13,7 +13,11 @@ CREATE TABLE IF NOT EXISTS ds_unidades.unidades_mac (
 INSERT INTO 
     ds_unidades.unidades_mac (cnes_padrao, codigo_unidade, distrito, nome, tipo_servi)
 SELECT 
-    cnes_padrao, no_da_us, ds, nome_fantasia, tipo_servi
+    cnes, 
+    no_da_us::INTEGER,
+    ds, 
+    nome_fantasia, 
+    tipo_equipamento
 FROM 
     ds_unidades.unidades
 ;
