@@ -78,10 +78,10 @@ DECLARE
         'ema_leitoscnes', 'ema_leitos_op', 'ema_no_de_altas', 'ema_no_de_evasao', 
         'ema_no_de_transf_externa', 'pp_pct_internados', 'pp_no_de_altas', 
         'pp_no_de_evasao', 'pp_no_de_transf_externa', 'pp_no_de_obito', 
-        'cpn_pct_internados', 'cpn_leitos__cnes', 'cpn_leitos_op', 'cpn_no_de_altas', 
+        'cpn_pct_internados', 'cpn_leitos_cnes', 'cpn_leitos_op', 'cpn_no_de_altas', 
         'cpn_no_de_evasao', 'cpn_no_de_transf_externa', 'cpn_no_de_obito', 
-        'berc__pct_internados', 'berc_leitos_op', 'berc__no_de_altas', 
-        'berc__no_de_evasao', 'berc__no_de_transf_externa'
+        'berc_pct_internados', 'berc_leitos_op', 'berc_no_de_altas', 
+        'berc_no_de_evasao', 'berc_no_de_transf_externa'
     ];
 BEGIN
     FOREACH col_name IN ARRAY cols

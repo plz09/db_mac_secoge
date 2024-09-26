@@ -1,58 +1,67 @@
-from ..database.database import write_df_to_sql
-from ..utils.excel_operations import remove_espacos_e_acentos
+import os
+import sys
+import pandas as pd
+
+current_dir = os.path.dirname(os.path.abspath(__file__))
+root_dir = os.path.dirname(os.path.dirname(current_dir))
+sys.path.append(root_dir)
+
+from src.utils.extract_sharepoint import get_file_as_dataframes
+from src.utils.excel_operations import remove_espacos_e_acentos
+from src.database.database import write_df_to_sql
 
 def process_mae_coruja_data(engine):
-    # Leitura dos dados
-    path_mae_coruja_mulher = 'data_bruto/mae_coruja/DADOS MULHER.xlsx'
-    path_mae_coruja_crianca = 'data_bruto/mae_coruja/DADOS CRIANÇA.xlsx'
-    path_mae_coruja_kits = 'data_bruto/mae_coruja/consolidado_kits_pmcr.xlsx'
-    path_mae_coruja_atividades = 'data_bruto/mae_coruja/consolidado_atividades_coletivas_pmcr.xlsx'
-    aba_atividades = 'atv_cltv_2018_2023'
-    aba_2024_mae_coruja_kits = '2024'
+    schema = 'mae_coruja'
 
-    df_mae_coruja_mulher = remove_espacos_e_acentos(path_mae_coruja_mulher)
-    df_mae_coruja_crianca = remove_espacos_e_acentos(path_mae_coruja_crianca)
-    df_mae_coruja_kits = remove_espacos_e_acentos(path_mae_coruja_kits, aba_selecionada=aba_2024_mae_coruja_kits)
-
-    df_mae_coruja_atividades = remove_espacos_e_acentos(path_mae_coruja_atividades, aba_selecionada=aba_atividades, skip_rows=11)
-
-    data = {
-        'mulher': df_mae_coruja_mulher,
-        'crianca': df_mae_coruja_crianca,
-        'kits': df_mae_coruja_kits,
-        'atividades': df_mae_coruja_atividades
+    paths = {
+        'mulher': '/Shared Documents/SESAU/NGI/data_bruto_mac/mae_coruja/DADOS MULHER.xlsx',
+        'crianca': '/Shared Documents/SESAU/NGI/data_bruto_mac/mae_coruja/DADOS CRIANÇA.xlsx',
+        'kits': ('/Shared Documents/SESAU/NGI/data_bruto_mac/mae_coruja/consolidado_kits_pmcr.xlsx', '2024'),
+        'atividades': ('/Shared Documents/SESAU/NGI/data_bruto_mac/mae_coruja/consolidado_atividades_coletivas_pmcr.xlsx', 'atv_cltv_2018_2023', 11)
     }
 
-    schema = 'mae_coruja'
+    # Processar cada conjunto de dados
+    data = {}
+    for key, value in paths.items():
+        if isinstance(value, tuple):
+            # Desempacotar informações se forem fornecidos caminho, aba e, opcionalmente, linhas para pular
+            path, aba, *skiprows = value
+            df = get_file_as_dataframes(path, sheet_name=aba, skiprows=skiprows[0] if skiprows else 0)
+        else:
+            # Carregar a primeira aba disponível se não especificado
+            df = get_file_as_dataframes(value)
+        
+        if df is not None:
+            df = remove_espacos_e_acentos(df)
+            data[key] = df
+
+    # Escrever dataframes no banco de dados
     for table_name, df in data.items():
-        print(f"Escrevendo a tabela {table_name} no esquema {schema}.")
-        write_df_to_sql(df, table_name, engine, schema)
+        if df is not None:
+            print(f"Escrevendo a tabela {table_name} no esquema {schema}.")
+            write_df_to_sql(df, table_name, engine, schema)
+        else:
+            print(f"Nenhum dado disponível para escrever para a tabela {table_name}.")
 
     # Processamento adicional dos arquivos específicos
-    path_mae_coruja_espacos = 'data_bruto/mae_coruja/Listagem_Espacos_PMCR_endereco_bairros_cobertos.xlsx'
+    path_mae_coruja_espacos = '/Shared Documents/SESAU/NGI/data_bruto_mac/mae_coruja/Listagem_Espacos_PMCR_endereco_bairros_cobertos.xlsx'
     abas_mae_coruja_espacos = [
-        'ESPACOS',
+        ('ESPACOS', 5, ['ESPAÇO', 'DS', 'SIGLA', 'LOCAL', 'ENDEREÇO', 'BAIRROS COBERTOS',
+                        'UNIDADES COBERTAS', 'DATA INAUGURAÇÃO ESPAÇO PMCR']),
         'Espaços_Unidades',
         'Espaços_Bairros_Cobertos'
     ]
 
-    for aba in abas_mae_coruja_espacos:
-        if aba == 'ESPACOS':
-            colunas_mae_co_espacos = ['ESPAÇO', 'DS', 'SIGLA', 'LOCAL', 'ENDEREÇO', 'BAIRROS COBERTOS',
-                                 'UNIDADES COBERTAS', 'DATA INAUGURAÇÃO ESPAÇO PMCR']
-            try:
-                df_mae_coruja_espacos = remove_espacos_e_acentos(
-                    path_mae_coruja_espacos, aba_selecionada=aba, skip_rows=5, colunas=colunas_mae_co_espacos)
-            except Exception as e:
-                print(f"Erro ao processar a aba {aba}: {e}")
-                continue  # pula para a próxima iteração se ocorrer um erro
+    for item in abas_mae_coruja_espacos:
+        if isinstance(item, tuple):
+            aba, skiprows, colunas = item
         else:
-            try:
-                df_mae_coruja_espacos = remove_espacos_e_acentos(
-                    path_mae_coruja_espacos, aba_selecionada=aba)
-            except Exception as e:
-                print(f"Erro ao processar a aba {aba}: {e}")
-                continue  # pula para a próxima iteração se ocorrer um erro
+            aba, skiprows, colunas = item, 0, None
 
-        table_name = aba.lower().replace(' ', '').replace('  ', '').replace('-', '').replace('ç', 'c')
-        write_df_to_sql(df_mae_coruja_espacos, table_name, engine, schema)
+        df = get_file_as_dataframes(path_mae_coruja_espacos, sheet_name=aba, skiprows=skiprows)
+        if df is not None:
+            df = remove_espacos_e_acentos(df) if colunas is None else remove_espacos_e_acentos(df[colunas])
+            table_name = aba.lower().replace(' ', '').replace('-', '').replace('ç', 'c')
+            write_df_to_sql(df, table_name, engine, schema)
+        else:
+            print(f"Erro ao processar a aba {aba}: DataFrame não carregado.")

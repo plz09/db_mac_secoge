@@ -49,12 +49,13 @@ def get_file_content(ctx, relative_url):
 
 def get_file_as_dataframes(relative_url, sheet_name=None, skiprows=0):
     """
-    Obtém um arquivo do SharePoint como múltiplos DataFrames do pandas, um para cada planilha.
+    Obtém um arquivo do SharePoint como um DataFrame do pandas.
+    Se não for especificado, carrega a primeira aba ou a única aba disponível.
 
     :param relative_url: A URL relativa do arquivo no SharePoint
     :param sheet_name: Nome ou lista de nomes de planilhas para ler (padrão None lê todas as planilhas)
     :param skiprows: Número de linhas a pular no início
-    :return: Um dicionário onde as chaves são nomes de planilhas e os valores são DataFrames
+    :return: Um DataFrame ou um dicionário de DataFrames dependendo da quantidade de abas e da especificação
     """
     site_url = os.getenv('SHAREPOINT_SITE_URL')
     username = os.getenv('SHAREPOINT_USERNAME')
@@ -69,16 +70,24 @@ def get_file_as_dataframes(relative_url, sheet_name=None, skiprows=0):
         return None
 
     try:
-        dataframes = pd.read_excel(file_content, sheet_name=sheet_name, skiprows=skiprows)
-        if isinstance(dataframes, dict):
-            logger.info(f"Planilhas disponíveis: {list(dataframes.keys())}")
-            return dataframes
+        # Primeiro carrega a lista de nomes de abas para verificar quantas estão disponíveis
+        xls = pd.ExcelFile(file_content)
+        sheet_names = xls.sheet_names  # Lista de todas as abas
+
+        # Determinar qual aba carregar
+        if sheet_name:
+            dataframes = pd.read_excel(xls, sheet_name=sheet_name, skiprows=skiprows)
         else:
-            sheet_key = sheet_name if sheet_name else 'Sheet1'
-            logger.info(f"Planilha lida: {sheet_key}")
-            return {sheet_key: dataframes}
+            # Se nenhuma aba específica for fornecida, carrega a primeira ou a única disponível
+            sheet_to_load = sheet_names[0]
+            dataframes = pd.read_excel(xls, sheet_name=sheet_to_load, skiprows=skiprows)
+
+        logger.info(f"Planilha(s) disponíveis: {sheet_names}")
+        logger.info(f"Planilha carregada: {sheet_to_load if sheet_name is None else sheet_name}")
+        
+        return dataframes
     except Exception as e:
-        logger.error(f"Erro ao converter conteúdo para DataFrames: {e}")
+        logger.error(f"Erro ao converter conteúdo para DataFrame(s): {e}")
         return None
 
 def log_dataframes_info(dataframes):
