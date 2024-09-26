@@ -8,6 +8,7 @@ def read_producao_data():
     path_dPort157 = 'data_bruto/producao/dPort157.xlsx'
     path_fproducao_2405 = 'data_bruto/producao/PAPE2405.csv'
     path_fproducao_2406 = 'data_bruto/producao/PAPE2406.csv'
+    path_fproducao_2407 = 'data_bruto/producao/PAPE2407.csv'
     path_dextrato_profissionais_sus = 'data_bruto/producao/dExtrato_Profissioais_SUS.xlsx'
 
     df_dFormaOrganiz = remove_espacos_e_acentos(path_dFormaOrganiz)
@@ -19,7 +20,8 @@ def read_producao_data():
     cols_fproducao = ['PA_CODUNI', 'PA_CMP', 'PA_CNSMED', 'PA_CBOCOD', 'PA_PROC_ID', 'PA_QTDAPR']
     df_fproducao_2405 = remove_espacos_e_acentos(path_fproducao_2405, colunas=cols_fproducao, dtype={'PA_CBOCOD': str})
     df_fproducao_2406 = remove_espacos_e_acentos(path_fproducao_2406, colunas=cols_fproducao, dtype={'PA_CBOCOD': str})
-    df_fproducao = pd.concat([df_fproducao_2405, df_fproducao_2406], ignore_index=True)
+    df_fproducao_2407 = remove_espacos_e_acentos(path_fproducao_2407, colunas=cols_fproducao, dtype={'PA_CBOCOD': str})
+    df_fproducao = pd.concat([df_fproducao_2405, df_fproducao_2406, df_fproducao_2407], ignore_index=True)
 
     df_producao_agg = df_fproducao.groupby(
                                 ['pa_coduni', 'pa_cmp', 'pa_proc_id', 'pa_cnsmed', 'pa_cbocod'], as_index=False
