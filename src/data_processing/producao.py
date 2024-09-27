@@ -17,7 +17,7 @@ def read_producao_data():
     path_fproducao_2405 = '/Shared Documents/SESAU/NGI/data_bruto_mac/producao/PAPE2405.csv'
     path_fproducao_2406 = '/Shared Documents/SESAU/NGI/data_bruto_mac/producao/PAPE2406.csv'
     path_fproducao_2407 = '/Shared Documents/SESAU/NGI/data_bruto_mac/producao/PAPE2407.csv'
-    path_dextrato_profissionais_sus = '/Shared Documents/SESAU/NGI/data_bruto_mac/producao/dExtrato_Profissioais_SUS.xlsx'
+    path_dextrato_profissionais_sus = '/Shared Documents/SESAU/NGI/data_bruto_mac/producao/dExtrato Profissioais SUS.xlsx'
     
     df_dFormaOrganiz = get_file_as_dataframes(path_dFormaOrganiz)
     df_dFormaOrganiz = remove_espacos_e_acentos(df_dFormaOrganiz)
@@ -31,23 +31,24 @@ def read_producao_data():
     df_dPort157 = get_file_as_dataframes(path_dPort157)
     df_dPort157 = remove_espacos_e_acentos(df_dPort157)
 
-    df_dextrato_profissionais_sus = get_file_as_dataframes(path_dextrato_profissionais_sus)
+    df_dextrato_profissionais_sus = get_file_as_dataframes(path_dextrato_profissionais_sus, sheet_name='Página1')
     df_dextrato_profissionais_sus = remove_espacos_e_acentos(df_dextrato_profissionais_sus)
 
     cols_fproducao = ['PA_CODUNI', 'PA_CMP', 'PA_CNSMED', 'PA_CBOCOD', 'PA_PROC_ID', 'PA_QTDAPR']
 
     df_fproducao_2405 = get_file_as_dataframes(path_fproducao_2405) 
+
     df_fproducao_2405 = df_fproducao_2405[cols_fproducao]
     df_fproducao_2405 = remove_espacos_e_acentos(df_fproducao_2405)
 
     df_fproducao_2406 = get_file_as_dataframes(path_fproducao_2406)
     df_fproducao_2406 = df_fproducao_2406[cols_fproducao]
-    df_fproducao_2406 = remove_espacos_e_acentos(path_fproducao_2406)
+    df_fproducao_2406 = remove_espacos_e_acentos(df_fproducao_2406)
 
     df_fproducao_2407 = get_file_as_dataframes(path_fproducao_2407)
 
     df_fproducao_2407 = df_fproducao_2407[cols_fproducao]
-    df_fproducao_2407 = remove_espacos_e_acentos(path_fproducao_2407)
+    df_fproducao_2407 = remove_espacos_e_acentos(df_fproducao_2407)
     df_fproducao = pd.concat([df_fproducao_2405, df_fproducao_2406, df_fproducao_2407], ignore_index=True)
 
     df_producao_agg = df_fproducao.groupby(

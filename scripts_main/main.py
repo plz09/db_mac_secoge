@@ -45,21 +45,21 @@ def main():
 
     script_dirs_and_files = {
         'scripts_sql/relacionamentos_por_schemas': [
-            #'create_calendario.sql',
-            #'create_unidades_mac.sql',
-            # 'rel_spa.sql',
-            # 'rel_horus.sql',
-            #'rel_maternidades.sql' #,
-            # #'rel_mae_coruja.sql',
-            #'rel_ouvidoria.sql' #,
-             'rel_atende_gestante.sql',
-            # 'rel_atbasica.sql',
-            # #'rel_producao.sql',
-            # 'rel_obras.sql'
+            'create_calendario.sql',
+            'create_unidades_mac.sql',
+            'rel_spa.sql',
+            'rel_horus.sql',
+            'rel_maternidades.sql',
+             'rel_mae_coruja.sql',
+            'rel_ouvidoria.sql',
+            'rel_atende_gestante.sql',
+            'rel_atbasica.sql',
+            'rel_producao.sql',
+             'rel_obras.sql'
         ],
         'scripts_sql/views_sql': [
-            #'views_mae_coruja.sql',
-            #'views_atencao_basica.sql'
+            'views_mae_coruja.sql',
+            'views_atencao_basica.sql'
         ]
     }
 
