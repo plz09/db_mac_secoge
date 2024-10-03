@@ -63,7 +63,7 @@ ADD COLUMN fk_id_unidades_mac INTEGER
 */
 
 UPDATE spa.spa_classificacaopediatria
-SET unidade = 'US 164 CENTRO DE REIDRATACAO E URG PED M CRAVO GAMA'
+SET unidade = 'Serviço De Pronto Atendimento/Cravo Gama'
 WHERE unidade = 'Cravo Gama'
 ;
 
@@ -123,7 +123,7 @@ ADD COLUMN fk_id_unidades_mac INTEGER
 ;
 
 UPDATE spa.spa_isolamentopediatria
-SET unidade = 'US 164 CENTRO DE REIDRATACAO E URG PED M CRAVO GAMA'
+SET unidade = 'Serviço De Pronto Atendimento/Cravo Gama'
 WHERE unidade = 'Cravo Gama'
 ;
 
@@ -209,7 +209,7 @@ ADD COLUMN fk_id_unidades_mac INTEGER
 
 
 UPDATE spa.spa_pediatria
-SET unidade = 'US 164 CENTRO DE REIDRATACAO E URG PED M CRAVO GAMA'
+SET unidade = 'Serviço De Pronto Atendimento/Cravo Gama'
 WHERE unidade LIKE '%Cravo Grama%'
 ;
 
