@@ -4,7 +4,7 @@ DECLARE
     column_name_info text; -- Usando um nome mais distinto para a variável
     columns_to_keep text[] := array[
         'id_conectazap', 'data', 'whatsapp', 'cns', 'roomid', 'acessou_com', 
-        'nome', 'transbordo__horario', 'encerrado_na_susi', 'avaliacao'
+        'nome', 'transbordo_horario', 'encerrado_na_susi', 'avaliacao'
     ];
     drop_columns_query text := 'ALTER TABLE atende_gestante.conectazap ';
 BEGIN
